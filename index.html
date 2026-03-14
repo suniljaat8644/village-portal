@@ -34,13 +34,14 @@
                     <small class="text-muted">Mandi Rates & Weather</small>
                 </div>
             </div>
-            <div class="col-6 col-md-4 col-lg-3">
-                <div class="card info-card p-3">
-                    <div class="icon-box">🎓</div>
-                    <h5>Scholarships</h5>
-                    <small class="text-muted">Apply for Support</small>
-                </div>
-            </div>
+           <div class="col-6 col-md-4 col-lg-3">
+    <a href="scholarships.html" style="text-decoration: none; color: inherit;">
+        <div class="card info-card p-3">
+            <div class="icon-box">🎓</div>
+            <h5>Scholarships</h5>
+            <small class="text-muted">Apply for Support</small>
+        </div>
+    </a> </div>
            <div class="col-6 col-md-4 col-lg-3">
             <a href="schemes.html" style="text-decoration: none; color: inherit;">
              <div class="card info-card p-3">
@@ -83,6 +84,14 @@
     </div>
 </div>
     </footer>
-
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Service Worker Registered!'))
+        .catch(err => console.log('Service Worker Failed', err));
+    });
+  }
+</script>
 </body>
 </html>
