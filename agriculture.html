@@ -30,16 +30,33 @@
         <div class="card mandi-card p-3 shadow-sm">
             <div class="d-flex justify-content-between">
                 <span><strong>Wheat (Gehu)</strong></span>
-                <span class="price-up">₹2,400 / quintal</span>
+               <span class="price-up">₹<span id="wheat-price">Loading...</span> / quintal</span>
             </div>
         </div>
         <div class="card mandi-card p-3 shadow-sm">
             <div class="d-flex justify-content-between">
                 <span><strong>Mustard (Sarson)</strong></span>
-                <span class="price-up">₹5,650 / quintal</span>
+                <span class="price-up">₹<span id="mustard-price">Loading...</span> / quintal</span>
             </div>
         </div>
     </div>
+    
+<script>
+    function updateAgricultureData() {
+        console.log("Agriculture Backend: Fetching data...");
+        
+        // This is a 'Mock' Backend. It waits 1 second then updates the price.
+        setTimeout(() => {
+            const wheatPrice = document.getElementById('wheat-price');
+            if(wheatPrice) {
+                wheatPrice.innerText = "2,480"; // The 'new' price from the backend
+                console.log("Agriculture Backend: Success!");
+            }
+        }, 1000);
+    }
 
+    // Start the process when the page opens
+    window.onload = updateAgricultureData;
+</script>
 </body>
 </html>

@@ -1,9 +1,49 @@
-<div class="col-6 col-md-4 col-lg-3">
-    <a href="schemes.html" style="text-decoration: none; color: inherit;">
-        <div class="card info-card p-3">
-            <div class="icon-box">📜</div>
-            <h5>Govt Schemes</h5>
-            <small class="text-muted">Ration & Pensions</small>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Govt Schemes - Village Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f1f8e9; } /* Light green theme */
+        .scheme-card { border-radius: 15px; border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 20px; border-left: 5px solid #1b5e20; }
+        .gov-link { background-color: #1b5e20; color: white; font-weight: bold; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-success shadow">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">⬅ Back to Home</a>
         </div>
-    </a>
-</div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">📜 Government Schemes</h2>
+
+        <div class="card scheme-card p-3">
+            <h5>🍎 Ration Card (NFSA)</h5>
+            <p class="text-muted">Check your name in the ration list or apply for a new card.</p>
+            <a href="https://nfsa.gov.in/" target="_blank" class="btn gov-link">Open Official Portal</a>
+        </div>
+
+        <div class="card scheme-card p-3">
+            <h5>👵 Old Age & Widow Pension</h5>
+            <p class="text-muted">Check monthly pension status for elders and widows.</p>
+            <a href="https://nsap.nic.in/" target="_blank" class="btn gov-link">Check Pension Status</a>
+        </div>
+
+        <div class="card scheme-card p-3">
+            <h5>🏠 PM Awas Yojana (PMAY)</h5>
+            <p class="text-muted">Check the beneficiary list for rural housing grants.</p>
+            <a href="https://pmayg.nic.in/" target="_blank" class="btn gov-link">View Beneficiary List</a>
+        </div>
+    </div>
+
+    <script>
+        console.log("Government Schemes page is live.");
+    </script>
+
+</body>
+</html>
