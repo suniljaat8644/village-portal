@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Care - Village Portal</title>
+    <title>Health Care - Gram Suvidha</title>
+    <link rel="manifest" href="manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #e3f2fd; } /* Light blue for health */
-        .health-card { border-radius: 15px; border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .emergency-btn { background-color: #d32f2f; color: white; font-weight: bold; width: 100%; }
+        body { background-color: #e3f2fd; font-family: 'Segoe UI', sans-serif; }
+        .health-card { border-radius: 15px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; transition: 0.3s; }
+        .health-card:hover { transform: scale(1.02); }
+        .emergency-btn { background-color: #d32f2f; color: white; font-weight: bold; width: 100%; padding: 12px; font-size: 1.1rem; }
+        .emergency-btn:hover { background-color: #b71c1c; color: white; }
+        .navbar { box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
@@ -22,29 +26,46 @@
     <div class="container mt-4">
         <h2 class="text-center mb-4">🏥 Health & Emergency</h2>
 
-        <div class="card health-card p-3 border-danger">
+        <div class="card health-card p-3 border-start border-danger border-5">
             <h5>🚑 Emergency Ambulance</h5>
-            <p class="text-muted">Directly call the emergency helpline.</p>
+            <p class="text-muted">Instantly call the government emergency helpline (108).</p>
             <a href="tel:108" class="btn emergency-btn">CALL 108 NOW</a>
         </div>
 
-        <div class="card health-card p-3">
+        <div class="card health-card p-3 border-start border-primary border-5">
             <h5>📍 Nearest Hospital</h5>
-            <p class="text-muted">Find the fastest route to the nearest clinic.</p>
-            <button onclick="findHospital()" class="btn btn-outline-primary w-100">Open Maps</button>
+            <p class="text-muted">Find the fastest route to the nearest clinic or hospital in your area.</p>
+            <button onclick="findHospital()" class="btn btn-outline-primary w-100">Open Maps for Hospitals</button>
         </div>
 
-        <div class="card health-card p-3">
-            <h5>💳 Ayushman Bharat</h5>
-            <p class="text-muted">Check your eligibility for free treatment.</p>
-            <a href="https://pmjay.gov.in/" target="_blank" class="btn btn-success w-100">Check Status</a>
+        <div class="card health-card p-3 border-start border-success border-5">
+            <h5>💳 Ayushman Bharat (PM-JAY)</h5>
+            <p class="text-muted">Check your card status or eligibility for free health coverage up to ₹5 Lakh.</p>
+            <a href="https://pmjay.gov.in/" target="_blank" class="btn btn-success w-100">Check Eligibility</a>
+        </div>
+
+        <div class="card health-card p-3 bg-white">
+            <h5>🩹 Quick First Aid</h5>
+            <ul class="small text-muted">
+                <li>For minor burns: Cool with running water.</li>
+                <li>For heatstroke: Move to a cool place and drink water.</li>
+            </ul>
         </div>
     </div>
 
     <script>
         function findHospital() {
-            // Backend logic to open maps with a search for hospitals
-            window.open("https://www.google.com/maps/search/hospital+near+me/");
+            // Updated logic to search for hospitals near the user's current location
+            const query = "hospitals near me";
+            const url = `https://www.google.com/maps/search/${encodeURIComponent(query)}`;
+            window.open(url, '_blank');
+        }
+
+        // Register Service Worker for Offline access
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js');
+            });
         }
     </script>
 

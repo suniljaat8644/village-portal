@@ -4,58 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agriculture - Gram Suvidha</title>
+    <link rel="manifest" href="manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .mandi-card { border-left: 5px solid #2e7d32; margin-bottom: 10px; }
-        .price-up { color: green; font-weight: bold; }
+        body { background-color: #f1f8e9; } /* Light green background */
+        .mandi-card { border-left: 5px solid #2e7d32; margin-bottom: 15px; border-radius: 10px; }
+        .price-up { color: #2e7d32; font-weight: bold; font-size: 1.1rem; }
+        .weather-badge { background: #fff; border-radius: 20px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
     </style>
 </head>
-<body class="bg-light">
+<body>
 
-    <nav class="navbar navbar-dark bg-success">
+    <nav class="navbar navbar-dark bg-success shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="index.html">⬅ Back to Home</a>
         </div>
     </nav>
 
     <div class="container mt-4">
-        <h2 class="mb-3">🌾 Agriculture Updates</h2>
+        <h2 class="mb-4">🌾 Agriculture Updates</h2>
         
-        <div class="card mb-4 p-3 shadow-sm bg-white text-center">
-            <h5>Current Weather: 32°C</h5>
-            <p class="text-muted">Perfect for harvesting today.</p>
+        <div class="weather-badge text-center mb-4">
+            <h5 class="mb-1">Current Weather: <span id="temp">32°C</span></h5>
+            <p class="text-muted mb-0">☀️ Clear Sky - Perfect for harvesting today.</p>
         </div>
 
-        <h4>Today's Mandi Rates</h4>
-        <div class="card mandi-card p-3 shadow-sm">
-            <div class="d-flex justify-content-between">
-                <span><strong>Wheat (Gehu)</strong></span>
-               <span class="price-up">₹<span id="wheat-price">Loading...</span> / quintal</span>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0">Today's Mandi Rates</h4>
+            <small class="text-muted" id="update-time">Updating...</small>
+        </div>
+
+        <div class="card mandi-card p-3 shadow-sm border-0 bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="d-block"><strong>Wheat (Gehu)</strong></span>
+                    <small class="text-muted">Grade: A</small>
+                </div>
+                <span class="price-up">₹<span id="wheat-price">...</span> / quintal</span>
             </div>
         </div>
-        <div class="card mandi-card p-3 shadow-sm">
-            <div class="d-flex justify-content-between">
-                <span><strong>Mustard (Sarson)</strong></span>
-                <span class="price-up">₹<span id="mustard-price">Loading...</span> / quintal</span>
+
+        <div class="card mandi-card p-3 shadow-sm border-0 bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="d-block"><strong>Mustard (Sarson)</strong></span>
+                    <small class="text-muted">Grade: Regular</small>
+                </div>
+                <span class="price-up">₹<span id="mustard-price">...</span> / quintal</span>
             </div>
+        </div>
+
+        <div class="mt-4 p-3 bg-white rounded shadow-sm">
+            <h6>Need Seed Subsidy?</h6>
+            <a href="https://pmkisan.gov.in/" target="_blank" class="btn btn-outline-success btn-sm w-100">Open PM-Kisan Portal</a>
         </div>
     </div>
-    
+
 <script>
     function updateAgricultureData() {
-        console.log("Agriculture Backend: Fetching data...");
+        console.log("Agriculture Backend: Fetching live data...");
         
-        // This is a 'Mock' Backend. It waits 1 second then updates the price.
+        // Simulating an API call with 1 second delay
         setTimeout(() => {
+            // Update Wheat Price
             const wheatPrice = document.getElementById('wheat-price');
-            if(wheatPrice) {
-                wheatPrice.innerText = "2,480"; // The 'new' price from the backend
-                console.log("Agriculture Backend: Success!");
-            }
+            if(wheatPrice) wheatPrice.innerText = "2,500"; 
+
+            // Update Mustard Price
+            const mustardPrice = document.getElementById('mustard-price');
+            if(mustardPrice) mustardPrice.innerText = "5,450";
+
+            // Update Time Stamp
+            const timeBox = document.getElementById('update-time');
+            const now = new Date();
+            if(timeBox) timeBox.innerText = "Last Updated: " + now.toLocaleTimeString();
+
+            console.log("Agriculture Backend: Success!");
         }, 1000);
     }
 
-    // Start the process when the page opens
+    // Register Service Worker for Offline access
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js');
+        });
+    }
+
+    // Start fetching data when page loads
     window.onload = updateAgricultureData;
 </script>
 </body>

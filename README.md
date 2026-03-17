@@ -8,7 +8,7 @@ Rural communities often face "Information Poverty." Even with smartphones, farme
 3. **Complexity:** Most portals are too cluttered for non-technical users.
 
 ## 🛠️ The Solution
-Gram Suvidha is a **Progressive Web App (PWA)** designed to be a one-stop-shop for village needs. It provides direct, verified links to Agriculture, Education, and Healthcare services.
+Gram Suvidha is a **Progressive Web App (PWA)** designed to be a one-stop shop for village needs. It provides direct, verified links to Agriculture, Education, and Healthcare services.
 
 ### Key Features:
 - **Offline Mode:** Works without internet once loaded (using Service Workers).
