@@ -10,9 +10,10 @@
         body { background-color: #f1f8e9; font-family: 'Segoe UI', sans-serif; }
         .scheme-card { border-radius: 15px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; border-left: 6px solid #1b5e20; background: white; transition: 0.3s; }
         .scheme-card:hover { transform: translateX(5px); }
-        .gov-link { background-color: #1b5e20; color: white; font-weight: bold; width: 100%; padding: 10px; border-radius: 8px; }
+        .gov-link { background-color: #1b5e20; color: white; font-weight: bold; width: 100%; padding: 12px; border-radius: 8px; text-decoration: none; display: inline-block; text-align: center; }
         .gov-link:hover { background-color: #2e7d32; color: white; }
         .badge-status { font-size: 0.75rem; vertical-align: middle; margin-left: 10px; }
+        .error-note { font-size: 0.8rem; color: #666; margin-top: 10px; display: block; }
     </style>
 </head>
 <body>
@@ -26,13 +27,17 @@
     <div class="container mt-4">
         <h2 class="text-center mb-4">📜 Government Schemes</h2>
 
+        <div class="alert alert-warning border-0 shadow-sm mb-4" role="alert">
+            <strong>⚠️ Notice:</strong> Official Government portals (.nic.in) may be slow or temporarily unavailable. If a link doesn't open, please try again after a few minutes.
+        </div>
+
         <div class="card scheme-card p-3">
             <div class="d-flex justify-content-between">
                 <h5>🍎 Ration Card (NFSA)</h5>
                 <span class="badge bg-success badge-status">Direct Link</span>
             </div>
-            <p class="text-muted small">Check your name in the village ration list, add family members, or track your food grain allotment.</p>
-            <a href="https://nfsa.gov.in/" target="_blank" class="btn gov-link">Open Official Portal</a>
+            <p class="text-muted small">Check your name in the village ration list or add family members.</p>
+            <a href="https://nfsa.gov.in/" target="_blank" class="gov-link">Open Official Portal</a>
         </div>
 
         <div class="card scheme-card p-3">
@@ -40,8 +45,9 @@
                 <h5>👵 Old Age & Widow Pension</h5>
                 <span class="badge bg-primary badge-status">DBT Tracking</span>
             </div>
-            <p class="text-muted small">Check monthly payment status and verification details for NSAP pensions.</p>
-            <a href="https://nsap.nic.in/" target="_blank" class="btn gov-link">Check Pension Status</a>
+            <p class="text-muted small">Check monthly payment status and verification for NSAP pensions.</p>
+            <a href="https://nsap.nic.in/portal" target="_blank" class="gov-link">Check Pension Status</a>
+            <small class="error-note">Note: If page fails, ensure you are on a secure network.</small>
         </div>
 
         <div class="card scheme-card p-3">
@@ -49,26 +55,25 @@
                 <h5>🏠 PM Awas Yojana (Rural)</h5>
                 <span class="badge bg-warning text-dark badge-status">List 2026</span>
             </div>
-            <p class="text-muted small">View the beneficiary list for housing grants and check your house construction progress.</p>
-            <a href="https://pmayg.nic.in/" target="_blank" class="btn gov-link">View Beneficiary List</a>
+            <p class="text-muted small">View the beneficiary list for housing grants and check progress.</p>
+            <a href="https://pmayg.nic.in/netiay/home.aspx" target="_blank" class="gov-link">View Beneficiary List</a>
         </div>
 
-        <div class="alert alert-dark d-flex align-items-center" role="alert">
+        <div class="alert alert-dark d-flex align-items-center mt-4" role="alert">
             <div>
-                <strong>💡 Tip:</strong> Use the <strong>DigiLocker</strong> app to keep your Aadhaar and Ration Card safe on your phone!
+                <strong>💡 Tip:</strong> Use the <strong>DigiLocker</strong> app to keep your Aadhaar and Ration Card safe!
             </div>
         </div>
     </div>
 
     <script>
-        // Service Worker for Offline access
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js');
+                navigator.serviceWorker.register('./sw.js')
+                .then(() => console.log("PWA Active"))
+                .catch(err => console.log("SW Error", err));
             });
         }
-        console.log("Government Schemes page is live and PWA-ready.");
     </script>
-
 </body>
 </html>
