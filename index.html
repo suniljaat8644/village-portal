@@ -14,6 +14,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
 
+        // Your Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyD10nmwLn3FjAYsJVcmpmOGfwizY_40wUU",
             authDomain: "village-portal-b4dce.firebaseapp.com",
@@ -24,6 +25,7 @@
             measurementId: "G-4X038XL2K3"
         };
 
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         console.log("Firebase Initialized!");
@@ -32,19 +34,19 @@
     <style>
         body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
         
-        /* Hero Section Styling */
-        .hero-section { background: #2e7d32; color: white; padding: 40px 20px; text-align: center; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; }
+        /* Updated Hero Section to center logo and text */
+        .hero-section { background: #2e7d32; color: white; padding: 50px 20px; text-align: center; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; }
         
-        /* Fixed Logo Styling */
+        /* Logo Styling */
         .app-logo { 
-            width: 80px; 
-            height: 80px; 
-            object-fit: cover; 
-            margin-bottom: 15px; 
-            border-radius: 50%; 
-            background: white; 
-            padding: 5px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+            width: 100px; 
+            height: 100px; 
+            object-fit: contain; /* ensures logo maintains aspect ratio */
+            margin-bottom: 20px; 
+            border-radius: 50%; /* makes frame circular */
+            background: white; /* contrast against green */
+            padding: 8px; /* inner space */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* depth */
             display: inline-block;
         }
         
@@ -52,7 +54,7 @@
         .info-card:hover { transform: translateY(-5px); background-color: #e8f5e9; box-shadow: 0 8px 15px rgba(0,0,0,0.15); }
         .icon-box { font-size: 3rem; margin-bottom: 10px; }
         
-        /* Search Bar Styling */
+        /* Professional Search Bar styling */
         .search-bar-container { max-width: 500px; margin: -30px auto 30px auto; position: relative; z-index: 10; }
         .input-group { border-radius: 30px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: none; background: white; }
         .search-input { border: none; padding: 15px 25px; font-size: 1rem; }
@@ -67,11 +69,9 @@
 <body>
 
     <div class="hero-section">
-        <img src="logo.png" 
-             alt="Gram Suvidha Logo" 
-             class="app-logo" 
-             onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/2991/2991148.png';">
-        <h1>Village Digital Hub</h1>
+        <img src="logo.png" alt="Gram Suvidha Logo" class="app-logo">
+        
+        <h1 class="mt-2">Village Digital Hub</h1>
         <p>Your one-stop for Agriculture, Education, and Govt Schemes</p>
     </div>
 
@@ -166,16 +166,18 @@
             });
         }
 
-        // 2. Smart Search Logic
+        // 2. Optimized Smart Search Logic (Routes directly on Enter)
         function handleSearch(event) {
             let input = document.getElementById('searchInput').value.toLowerCase();
             
+            // Real-time visual filtering logic
             let cards = document.getElementsByClassName('card-item');
             for (let i = 0; i < cards.length; i++) {
                 let text = cards[i].innerText.toLowerCase();
                 cards[i].style.display = text.includes(input) ? "" : "none";
             }
 
+            // Keyword Routing on 'Enter' or Auto-Trigger (A11y focus)
             if (event.key === 'Enter' && input.trim() !== "") {
                 if (input.includes("pension") || input.includes("old age") || input.includes("ration") || input.includes("awas") || input.includes("scheme")) {
                     window.location.href = "schemes.html";
@@ -189,16 +191,16 @@
             }
         }
 
-        // 3. Voice Search Logic
+        // 3. Voice Search Logic using Web Speech API
         function startVoiceSearch() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                alert("Voice search not supported in this browser. Please use Chrome.");
+                alert("Voice search is not supported in this browser. Please use Chrome.");
                 return;
             }
 
             const recognition = new SpeechRecognition();
-            recognition.lang = 'hi-IN'; 
+            recognition.lang = 'hi-IN'; // Default to Hindi
             const inputField = document.getElementById('searchInput');
             
             inputField.placeholder = "Listening... बोलिए";
@@ -207,6 +209,8 @@
             recognition.onresult = function(event) {
                 const voiceResult = event.results[0][0].transcript;
                 inputField.value = voiceResult;
+                
+                // Fire the search event automatically so it routes on result
                 handleSearch({ key: 'Enter' });
             };
 
