@@ -32,15 +32,27 @@
     <style>
         body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
         
-        /* Hero Section with Logo Support */
+        /* Hero Section Styling */
         .hero-section { background: #2e7d32; color: white; padding: 40px 20px; text-align: center; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; }
-        .app-logo { width: 80px; height: 80px; margin-bottom: 15px; border-radius: 50%; background: white; padding: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        
+        /* Fixed Logo Styling */
+        .app-logo { 
+            width: 80px; 
+            height: 80px; 
+            object-fit: cover; 
+            margin-bottom: 15px; 
+            border-radius: 50%; 
+            background: white; 
+            padding: 5px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+            display: inline-block;
+        }
         
         .info-card { border: none; border-radius: 15px; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); height: 100%; background: white; }
         .info-card:hover { transform: translateY(-5px); background-color: #e8f5e9; box-shadow: 0 8px 15px rgba(0,0,0,0.15); }
         .icon-box { font-size: 3rem; margin-bottom: 10px; }
         
-        /* Professional Search Bar with Voice Button */
+        /* Search Bar Styling */
         .search-bar-container { max-width: 500px; margin: -30px auto 30px auto; position: relative; z-index: 10; }
         .input-group { border-radius: 30px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: none; background: white; }
         .search-input { border: none; padding: 15px 25px; font-size: 1rem; }
@@ -55,7 +67,10 @@
 <body>
 
     <div class="hero-section">
-        <img src="logo.png" alt="Logo" class="app-logo">
+        <img src="logo.png" 
+             alt="Gram Suvidha Logo" 
+             class="app-logo" 
+             onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/2991/2991148.png';">
         <h1>Village Digital Hub</h1>
         <p>Your one-stop for Agriculture, Education, and Govt Schemes</p>
     </div>
@@ -151,18 +166,16 @@
             });
         }
 
-        // 2. Optimized Smart Search Logic
+        // 2. Smart Search Logic
         function handleSearch(event) {
             let input = document.getElementById('searchInput').value.toLowerCase();
             
-            // Real-time filtering logic
             let cards = document.getElementsByClassName('card-item');
             for (let i = 0; i < cards.length; i++) {
                 let text = cards[i].innerText.toLowerCase();
                 cards[i].style.display = text.includes(input) ? "" : "none";
             }
 
-            // Keyword Routing on 'Enter'
             if (event.key === 'Enter' && input.trim() !== "") {
                 if (input.includes("pension") || input.includes("old age") || input.includes("ration") || input.includes("awas") || input.includes("scheme")) {
                     window.location.href = "schemes.html";
@@ -194,8 +207,6 @@
             recognition.onresult = function(event) {
                 const voiceResult = event.results[0][0].transcript;
                 inputField.value = voiceResult;
-                
-                // Fire the search event automatically
                 handleSearch({ key: 'Enter' });
             };
 
