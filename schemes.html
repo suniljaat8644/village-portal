@@ -10,8 +10,10 @@
         body { background-color: #f1f8e9; font-family: 'Segoe UI', sans-serif; }
         .scheme-card { border-radius: 15px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; border-left: 6px solid #1b5e20; background: white; transition: 0.3s; }
         .scheme-card:hover { transform: translateX(5px); }
-        .gov-link { background-color: #1b5e20; color: white; font-weight: bold; width: 100%; padding: 12px; border-radius: 8px; text-decoration: none; display: inline-block; text-align: center; }
+        .gov-link { background-color: #1b5e20; color: white; font-weight: bold; padding: 12px; border-radius: 8px; text-decoration: none; display: inline-block; text-align: center; border: none; }
         .gov-link:hover { background-color: #2e7d32; color: white; }
+        .btn-demo { border: 2px solid #1b5e20; color: #1b5e20; font-weight: bold; border-radius: 8px; padding: 10px; }
+        .btn-demo:hover { background-color: #f1f8e9; color: #1b5e20; }
         .badge-status { font-size: 0.75rem; vertical-align: middle; margin-left: 10px; }
         .error-note { font-size: 0.8rem; color: #666; margin-top: 10px; display: block; }
     </style>
@@ -28,7 +30,7 @@
         <h2 class="text-center mb-4">📜 Government Schemes</h2>
 
         <div class="alert alert-warning border-0 shadow-sm mb-4" role="alert">
-            <strong>⚠️ Notice:</strong> Official Government portals (.nic.in) may be slow or temporarily unavailable. If a link doesn't open, please try again after a few minutes.
+            <strong>⚠️ Notice:</strong> Official Government portals (.nic.in) may be slow. Use "View Demo" if links do not open.
         </div>
 
         <div class="card scheme-card p-3">
@@ -37,7 +39,7 @@
                 <span class="badge bg-success badge-status">Direct Link</span>
             </div>
             <p class="text-muted small">Check your name in the village ration list or add family members.</p>
-            <a href="https://nfsa.gov.in/" target="_blank" class="gov-link">Open Official Portal</a>
+            <a href="https://nfsa.gov.in/" target="_blank" class="gov-link w-100">Open Official Portal</a>
         </div>
 
         <div class="card scheme-card p-3">
@@ -46,8 +48,11 @@
                 <span class="badge bg-primary badge-status">DBT Tracking</span>
             </div>
             <p class="text-muted small">Check monthly payment status and verification for NSAP pensions.</p>
-            <a href="https://nsap.nic.in/portal" target="_blank" class="gov-link">Check Pension Status</a>
-            <small class="error-note">Note: If page fails, ensure you are on a secure network.</small>
+            <div class="d-flex gap-2">
+                <a href="https://nsap.nic.in/portal" target="_blank" class="gov-link flex-fill">Open Live Portal</a>
+                <button onclick="showMockData('pension')" class="btn btn-demo flex-fill">View Demo</button>
+            </div>
+            <small class="error-note">Note: If page fails, use the Demo button.</small>
         </div>
 
         <div class="card scheme-card p-3">
@@ -56,7 +61,10 @@
                 <span class="badge bg-warning text-dark badge-status">List 2026</span>
             </div>
             <p class="text-muted small">View the beneficiary list for housing grants and check progress.</p>
-            <a href="https://pmayg.nic.in/netiay/home.aspx" target="_blank" class="gov-link">View Beneficiary List</a>
+            <div class="d-flex gap-2">
+                <a href="https://pmayg.nic.in/netiay/home.aspx" target="_blank" class="gov-link flex-fill">Open Live Portal</a>
+                <button onclick="showMockData('awas')" class="btn btn-demo flex-fill">View Demo</button>
+            </div>
         </div>
 
         <div class="alert alert-dark d-flex align-items-center mt-4" role="alert">
@@ -66,13 +74,63 @@
         </div>
     </div>
 
+    <div class="modal fade" id="demoModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
+          <div class="modal-header bg-success text-white" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+            <h5 class="modal-title" id="modalTitle">Status Details</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="modalContent">
+              </div>
+          <div class="modal-footer border-0">
+            <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
+        // PWA Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
                 .then(() => console.log("PWA Active"))
                 .catch(err => console.log("SW Error", err));
             });
+        }
+
+        // Mock Data Logic
+        function showMockData(type) {
+            const modal = new bootstrap.Modal(document.getElementById('demoModal'));
+            const title = document.getElementById('modalTitle');
+            const content = document.getElementById('modalContent');
+
+            if(type === 'pension') {
+                title.innerText = "👵 Pension Status (Mock)";
+                content.innerHTML = `
+                    <div class="p-2">
+                        <p><strong>Name:</strong> Ram Lal Choudhary</p>
+                        <p><strong>Village:</strong> JECRC Village Hub</p>
+                        <p><strong>Status:</strong> <span class="badge bg-success">PAYMENT RELEASED</span></p>
+                        <p><strong>Amount:</strong> ₹1,000</p>
+                        <p class="text-muted small">Reference: NSAP/2026/001</p>
+                    </div>
+                `;
+            } else if(type === 'awas') {
+                title.innerText = "🏠 PM Awas Status (Mock)";
+                content.innerHTML = `
+                    <div class="p-2">
+                        <p><strong>Beneficiary:</strong> Smt. Shanti Devi</p>
+                        <p><strong>House Status:</strong> <span class="badge bg-warning text-dark">IN PROGRESS</span></p>
+                        <p><strong>Installment:</strong> 2nd Released (₹40,000)</p>
+                        <p class="text-muted small">PMAY-G Reg: RJ-99210</p>
+                    </div>
+                `;
+            }
+            modal.show();
         }
     </script>
 </body>
