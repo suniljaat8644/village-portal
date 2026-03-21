@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gram Suvidha Portal</title>
+    <title>Village Digital Hub - Gram Suvidha Portal</title>
     
     <link rel="manifest" href="manifest.json">
+    
     <link rel="icon" type="image/png" href="logo.png">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -13,65 +14,99 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+        import { firebaseConfig } from './firebase-config.js'; // Imports clean config
 
-        // Your Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyD10nmwLn3FjAYsJVcmpmOGfwizY_40wUU",
-            authDomain: "village-portal-b4dce.firebaseapp.com",
-            projectId: "village-portal-b4dce",
-            storageBucket: "village-portal-b4dce.firebasestorage.app",
-            messagingSenderId: "233871401426",
-            appId: "1:233871401426:web:e6522e90b90fd0ed9ba80b",
-            measurementId: "G-4X038XL2K3"
-        };
-
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
-        console.log("Firebase Initialized!");
+        console.log("Firebase initialized successfully!");
     </script>
 
     <style>
-        body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
         
-        /* Updated Hero Section to center logo and text */
-        .hero-section { background: #2e7d32; color: white; padding: 50px 20px; text-align: center; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; }
+        /* Modernized Hero Section with Navigation */
+        .hero-section { background: #2e7d32; color: white; padding: 40px 20px 80px 20px; text-align: center; border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; position: relative; }
         
-        /* Logo Styling */
-        .app-logo { 
-            width: 100px; 
-            height: 100px; 
-            object-fit: contain; /* ensures logo maintains aspect ratio */
-            margin-bottom: 20px; 
-            border-radius: 50%; /* makes frame circular */
-            background: white; /* contrast against green */
-            padding: 8px; /* inner space */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* depth */
-            display: inline-block;
-        }
-        
-        .info-card { border: none; border-radius: 15px; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); height: 100%; background: white; }
-        .info-card:hover { transform: translateY(-5px); background-color: #e8f5e9; box-shadow: 0 8px 15px rgba(0,0,0,0.15); }
-        .icon-box { font-size: 3rem; margin-bottom: 10px; }
-        
-        /* Professional Search Bar styling */
-        .search-bar-container { max-width: 500px; margin: -30px auto 30px auto; position: relative; z-index: 10; }
-        .input-group { border-radius: 30px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: none; background: white; }
-        .search-input { border: none; padding: 15px 25px; font-size: 1rem; }
+        /* Navigation (Home and Contact Links) */
+        /* 1. Improved Navigation Spacing */
+.header-nav { 
+    position: absolute; 
+    top: 25px; 
+    right: 30px; 
+    display: flex; 
+    gap: 25px; 
+    font-weight: 700; 
+    font-size: 0.9rem; 
+    letter-spacing: 1px;
+}
+
+/* 2. Make the Logo Circle "Perfect" */
+.logo-placeholder { 
+    width: 110px;  /* Slightly smaller circle */
+    height: 110px; 
+    margin: 10px auto 15px auto; 
+    background: white; 
+    border-radius: 50%; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* This clips the image to the circle */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    border: 3px solid rgba(255,255,255,0.3); /* Adds a subtle outer ring */
+}
+
+/* 3. Make the Image Fill the Space */
+.logo-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This makes the logo fill the whole circle perfectly */
+}
+
+/* 4. Adjust Hero Text */
+.hero-section h1 { 
+    font-size: 2.2rem; 
+    margin-top: 10px;
+    font-weight: 800;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+        .hero-section p { font-size: 1.2rem; margin: 0; opacity: 0.9; }
+
+        /* Modernized Search Bar */
+        .search-bar-container { max-width: 600px; margin: -35px auto 40px auto; position: relative; z-index: 10; }
+        .input-group { border-radius: 35px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.1); border: none; background: white; }
+        .search-input { border: none; padding: 20px 30px; font-size: 1.1rem; }
         .search-input:focus { box-shadow: none; }
-        .voice-btn { background: white; border: none; padding-right: 20px; font-size: 1.3rem; color: #2e7d32; transition: 0.2s; }
-        .voice-btn:hover { color: #d32f2f; transform: scale(1.1); }
-        
+        .voice-btn { background: white; border: none; padding-right: 25px; font-size: 1.5rem; cursor: pointer; color: #6c757d; transition: 0.2s; }
+        .voice-btn:hover { color: #d32f2f; }
+
+        /* Service Cards styling matching the clean design */
+        .service-card { border: none; border-radius: 20px; transition: 0.3s; box-shadow: 0 6px 15px rgba(0,0,0,0.05); height: 100%; background: white; text-align: center; overflow: hidden; }
+        .service-card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.1); background-color: #fbfdfc; }
+        .icon-box { font-size: 4rem; margin: 25px 0 10px 0; }
+        .service-card h5 { font-weight: 700; color: #333; margin-bottom: 5px; }
+        .service-card small { color: #888; display: block; padding-bottom: 25px; }
         a { text-decoration: none; color: inherit; }
+        
+        /* Fixed Floating Button for Chat/Help */
+        .chat-btn { position: fixed; bottom: 25px; right: 25px; background: #007bff; color: white; padding: 12px 24px; border-radius: 30px; font-weight: 700; box-shadow: 0 5px 15px rgba(0,123,255,0.4); z-index: 100; font-size: 0.9rem; }
+        .chat-btn:hover { background: #0056b3; color: white; }
+
         footer { background: white; padding: 40px 0; margin-top: 50px; border-top: 1px solid #ddd; }
     </style>
 </head>
 <body>
 
     <div class="hero-section">
-        <img src="logo.png" alt="Gram Suvidha Logo" class="app-logo">
+        <div class="header-nav">
+            <a href="index.html">HOME</a>
+            <a href="contact.html">CONTACT</a>
+        </div>
+
+        <div class="logo-placeholder">
+            <img src="logo.png" alt="Gram Suvidha Logo">
+        </div>
         
-        <h1 class="mt-2">Village Digital Hub</h1>
+        <h1>Village Digital Hub</h1>
         <p>Your one-stop for Agriculture, Education, and Govt Schemes</p>
     </div>
 
@@ -84,80 +119,70 @@
     </div>
 
     <div class="container mb-5">
-        <div class="row g-4 text-center" id="cardContainer">
-            <div class="col-6 col-md-4 col-lg-3 card-item">
+        <div class="row g-4 justify-content-center" id="cardContainer">
+            <div class="col-12 col-sm-6 col-lg-4 card-item">
                 <a href="agriculture.html">
-                    <div class="card info-card p-3">
+                    <div class="card service-card p-2">
                         <div class="icon-box">🚜</div>
                         <h5>Agriculture</h5>
-                        <small class="text-muted">Mandi Rates & Weather</small>
+                        <small>Mandi Rates & Weather</small>
                     </div>
                 </a>
             </div>
-            <div class="col-6 col-md-4 col-lg-3 card-item">
+            <div class="col-12 col-sm-6 col-lg-4 card-item">
                 <a href="scholarships.html">
-                    <div class="card info-card p-3">
+                    <div class="card service-card p-2">
                         <div class="icon-box">🎓</div>
                         <h5>Scholarships</h5>
-                        <small class="text-muted">Apply for Support</small>
+                        <small>Apply for Support</small>
                     </div>
                 </a>
             </div>
-            <div class="col-6 col-md-4 col-lg-3 card-item">
+            <div class="col-12 col-sm-6 col-lg-4 card-item">
                 <a href="schemes.html">
-                    <div class="card info-card p-3">
+                    <div class="card service-card p-2">
                         <div class="icon-box">📜</div>
                         <h5>Govt Schemes</h5>
-                        <small class="text-muted">Ration & Pensions</small>
+                        <small>Ration & Pensions</small>
                     </div>
                 </a>
             </div>
-            <div class="col-6 col-md-4 col-lg-3 card-item">
+            <div class="col-12 col-sm-6 col-lg-4 card-item">
                 <a href="healthcare.html">
-                    <div class="card info-card p-3">
+                    <div class="card service-card p-2">
                         <div class="icon-box">🏥</div>
                         <h5>Health Care</h5>
-                        <small class="text-muted">Find Nearby Clinics</small>
+                        <small>Find Nearby Clinics</small>
                     </div>
                 </a>
             </div>
-            <div class="col-6 col-md-4 col-lg-3 card-item">
+            <div class="col-12 col-sm-6 col-lg-4 card-item">
                 <a href="support.html">
-                    <div class="card info-card p-3">
+                    <div class="card service-card p-2">
                         <div class="icon-box">📩</div>
                         <h5>Support</h5>
-                        <small class="text-muted">Complaints & Help</small>
+                        <small>Complaints & Help</small>
                     </div>
                 </a>
             </div>
         </div>
     </div>
 
+    <a href="#" class="chat-btn">codeHelp</a>
+
     <footer>
-        <div class="container">
-            <div class="row text-center mb-4">
-                <div class="col-md-6 mx-auto">
-                    <div class="card p-4 shadow-sm border-0">
-                        <h4 class="mb-3">Need Direct Help?</h4>
-                        <div class="d-flex gap-2 justify-content-center">
-                            <a href="https://wa.me/919509036873" class="btn btn-success flex-fill p-3"><strong>WhatsApp</strong></a>
-                            <a href="tel:+919509036873" class="btn btn-primary flex-fill p-3"><strong>Call Now</strong></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="text-center">
-                <a href="https://www.youtube.com/@BTECH_VLOGGER_SUNIL" target="_blank" class="btn btn-danger mb-3">
-                    🔴 Watch My Latest Videos
-                </a>
-                <p class="text-muted">Created with ❤️ by <strong>Sunil Choudhary</strong></p>
+        <div class="container text-center">
+            <p class="text-muted">Gram Suvidha Portal - Bridging the Digital Divide</p>
+            <p class="text-muted">Created with ❤️ by <strong>Sunil Choudhary</strong></p>
+            <div class="d-flex gap-2 justify-content-center mt-3">
+                <a href="https://wa.me/919509036873" class="btn btn-sm btn-success p-2 px-3"><strong>WhatsApp</strong></a>
+                <a href="tel:+919509036873" class="btn btn-sm btn-primary p-2 px-3"><strong>Call Now</strong></a>
             </div>
         </div>
     </footer>
 
     <script>
-        // 1. Service Worker registration
+        // 1. Service Worker registration (UNCHANGED)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
@@ -166,7 +191,7 @@
             });
         }
 
-        // 2. Optimized Smart Search Logic (Routes directly on Enter)
+        // 2. Smart Search Logic (Routes directly on Enter) (UNCHANGED)
         function handleSearch(event) {
             let input = document.getElementById('searchInput').value.toLowerCase();
             
@@ -177,7 +202,7 @@
                 cards[i].style.display = text.includes(input) ? "" : "none";
             }
 
-            // Keyword Routing on 'Enter' or Auto-Trigger (A11y focus)
+            // Keyword Routing on 'Enter' or Auto-Trigger
             if (event.key === 'Enter' && input.trim() !== "") {
                 if (input.includes("pension") || input.includes("old age") || input.includes("ration") || input.includes("awas") || input.includes("scheme")) {
                     window.location.href = "schemes.html";
@@ -191,16 +216,16 @@
             }
         }
 
-        // 3. Voice Search Logic using Web Speech API
+        // 3. Voice Search Logic using Web Speech API (UNCHANGED)
         function startVoiceSearch() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                alert("Voice search is not supported in this browser. Please use Chrome.");
+                alert("Voice search is not supported in this browser. Please use Google Chrome.");
                 return;
             }
 
             const recognition = new SpeechRecognition();
-            recognition.lang = 'hi-IN'; // Default to Hindi
+            recognition.lang = 'hi-IN'; // Default to Hindi-India
             const inputField = document.getElementById('searchInput');
             
             inputField.placeholder = "Listening... बोलिए";
