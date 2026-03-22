@@ -19,10 +19,7 @@
         .btn-update { background: var(--primary); color: white; }
         .form-label { font-weight: 600; color: #555; }
         .form-control, .form-select { border-radius: 12px; padding: 12px; border: 1px solid #eee; background: #fafafa; }
-        
-        /* Table Styling */
         .table-container { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .badge-pending { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
     </style>
 </head>
 <body>
@@ -35,7 +32,7 @@
     <div class="container mt-4 pb-5">
         <div class="mb-4">
             <h3 class="fw-bold">Ram Ram, Officer! 👋</h3>
-            <p class="text-muted">Update live rates and manage village complaints.</p>
+            <p class="text-muted">Targeted news publishing and complaint management.</p>
         </div>
 
         <div class="row g-3 mb-4">
@@ -44,11 +41,11 @@
         </div>
 
         <div class="row g-4">
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <div class="card control-card p-4">
                     <div class="section-title"><span></span> Mandi Rate Update</div>
                     <div class="mb-3">
-                        <label class="form-label">Select Crop (Fasal)</label>
+                        <label class="form-label text-success">Select Crop</label>
                         <select id="crop-select" class="form-select">
                             <option value="wheat">Wheat (Gehu)</option>
                             <option value="mustard">Mustard (Sarso)</option>
@@ -57,24 +54,43 @@
                         </select>
                     </div>
                     <div class="mb-4">
-                        <label class="form-label">New Price (Naya Bhav)</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white">₹</span>
-                            <input type="number" id="mandi-input" class="form-control" placeholder="Ex: 2450">
-                        </div>
+                        <label class="form-label text-success">Price (₹)</label>
+                        <input type="number" id="mandi-input" class="form-control" placeholder="Ex: 2450">
                     </div>
-                    <button id="update-price-btn" class="btn-action btn-update">🚀 Publish Live Rate</button>
+                    <button id="update-price-btn" class="btn-action btn-update shadow">🚀 Publish Live Rate</button>
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <div class="card control-card p-4">
-                    <div class="section-title"><span></span> Important Notice</div>
-                    <div class="mb-3">
-                        <label class="form-label">Announcement Text</label>
-                        <textarea id="news-text" class="form-control" rows="4" placeholder="Kisan bhaiyo ke liye koi jaankari..."></textarea>
+                    <div class="section-title"><span></span> Target Announcement</div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label small">State</label>
+                            <select id="news-state" class="form-select">
+                                <option value="General">All States</option>
+                                <option value="Rajasthan">Rajasthan</option>
+                                <option value="Haryana">Haryana</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small">District</label>
+                            <select id="news-district" class="form-select">
+                                <option value="">Select District</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small">Village</label>
+                            <select id="news-village" class="form-select">
+                                <option value="">Select Village</option>
+                            </select>
+                        </div>
                     </div>
-                    <button id="update-news-btn" class="btn-action btn-dark">Update Ticker Bar</button>
+                    <div class="mb-3">
+                        <label class="form-label">Announcement Message</label>
+                        <textarea id="news-text" class="form-control" rows="2" placeholder="Kisan bhaiyo ke liye news..."></textarea>
+                    </div>
+                    <button id="update-news-btn" class="btn-action btn-dark shadow">Update Specific Ticker</button>
                 </div>
             </div>
         </div>
@@ -82,20 +98,18 @@
         <div class="row mt-4">
             <div class="col-12">
                 <div class="table-container">
-                    <div class="section-title"><span></span> Gaon ki Shikayatein (Live)</div>
+                    <div class="section-title"><span></span> Live Complaints</div>
                     <div class="table-responsive">
                         <table class="table table-hover align-middle">
                             <thead class="table-light">
                                 <tr>
                                     <th>Kisan</th>
-                                    <th>Mobile</th>
                                     <th>Status</th>
                                     <th>Message</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="complaint-list">
-                                </tbody>
+                            <tbody id="complaint-list"></tbody>
                         </table>
                     </div>
                 </div>
@@ -111,78 +125,96 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // --- CASCADING DATA FOR ADMIN ---
+        const areaData = {
+            "Rajasthan": {
+                "Jaipur": ["Amer", "Sanganer", "XYZ Gaon"],
+                "Nagaur": ["Didwana", "Kuchaman","MERTA","DEGNA", "ABC Gaon"]
+            },
+            "Haryana": {
+                "Sirsa": ["Ellenabad", "Mandi Dabwali"],
+                "Hisar": ["Adampur", "Hansi"]
+            }
+        };
+
+        const stateSel = document.getElementById('news-state');
+        const distSel = document.getElementById('news-district');
+        const villSel = document.getElementById('news-village');
+
+        stateSel.addEventListener('change', () => {
+            distSel.innerHTML = '<option value="">Select District</option>';
+            villSel.innerHTML = '<option value="">Select Village</option>';
+            if(areaData[stateSel.value]) {
+                Object.keys(areaData[stateSel.value]).forEach(d => {
+                    distSel.innerHTML += `<option value="${d}">${d}</option>`;
+                });
+            }
+        });
+
+        distSel.addEventListener('change', () => {
+            villSel.innerHTML = '<option value="">Select Village</option>';
+            const state = stateSel.value;
+            const dist = distSel.value;
+            if(areaData[state] && areaData[state][dist]) {
+                areaData[state][dist].forEach(v => {
+                    villSel.innerHTML += `<option value="${v}">${v}</option>`;
+                });
+            }
+        });
+
         // --- 1. MANDI UPDATE ---
         document.getElementById('update-price-btn').addEventListener('click', async () => {
             const crop = document.getElementById('crop-select').value;
             const price = document.getElementById('mandi-input').value;
-            if(!price) { alert("Bhai, price toh dalo!"); return; }
-            try {
-                await setDoc(doc(db, "mandi_prices", crop), { rate: price, timestamp: new Date().toLocaleString() });
-                await setDoc(doc(db, "portal_data", "mandi"), { text: `${crop.toUpperCase()}: ₹${price}` });
-                alert("Mandi Bhav Update Ho Gaya! ✅");
-                document.getElementById('mandi-input').value = "";
-            } catch (e) { alert("Error: " + e.message); }
+            if(!price) return alert("Price daalein!");
+            await setDoc(doc(db, "mandi_prices", crop), { rate: price, timestamp: new Date().toLocaleString() });
+            alert("Mandi Rate Updated! ✅");
         });
 
-        // --- 2. NEWS UPDATE ---
+        // --- 2. TARGETED NEWS UPDATE ---
         document.getElementById('update-news-btn').addEventListener('click', async () => {
             const news = document.getElementById('news-text').value;
-            if(!news) { alert("Bhai, kuch likho toh sahi!"); return; }
+            const village = villSel.value || "General";
+            
+            if(!news) return alert("Kuch toh likho!");
+
+            // Agar user ne koi gaon nahi chuna toh wo 'news' (General) portal par jayegi
+            const docName = village === "General" ? "news" : `news_${village}`;
+
             try {
-                await setDoc(doc(db, "portal_data", "news"), { text: news });
-                alert("Ticker Update Ho Gaya! 📜");
+                await setDoc(doc(db, "portal_data", docName), { 
+                    text: news, 
+                    village: village,
+                    timestamp: new Date().toLocaleString() 
+                });
+                alert(`${village} ke liye news update ho gayi!`);
                 document.getElementById('news-text').value = "";
-            } catch (e) { alert("Error: " + e.message); }
+            } catch (e) { alert(e.message); }
         });
 
-        // --- 3. LIVE COMPLAINTS LISTENER ---
-        const compRef = collection(db, "complaints");
-        onSnapshot(query(compRef, orderBy("time", "desc")), (snapshot) => {
+        // --- 3. COMPLAINTS (Simplified for performance) ---
+        onSnapshot(query(collection(db, "complaints"), orderBy("time", "desc")), (snapshot) => {
             const list = document.getElementById('complaint-list');
             document.getElementById('complaint-count').innerText = snapshot.size;
             list.innerHTML = "";
-            
-            snapshot.forEach((complaintDoc) => {
-                const d = complaintDoc.data();
-                const id = complaintDoc.id;
-                
-                // Status Color Logic
-                const statusClass = d.status === "Solved" ? "bg-success" : "bg-warning text-dark";
-                
+            snapshot.forEach((comp) => {
+                const d = comp.data();
+                const id = comp.id;
                 list.innerHTML += `
                     <tr>
-                        <td><b>${d.name}</b><br><small class="text-muted">${d.time || ''}</small></td>
-                        <td><a href="tel:${d.phone}" class="text-decoration-none">📞 ${d.phone}</a></td>
-                        <td><span class="badge ${statusClass}">${d.status || 'Pending'}</span></td>
-                        <td style="font-size: 0.85rem; max-width: 250px;"><b>${d.subject}:</b> ${d.message}</td>
+                        <td><b>${d.name}</b><br><small>${d.phone}</small></td>
+                        <td><span class="badge ${d.status === "Solved" ? "bg-success" : "bg-warning text-dark"}">${d.status || 'Pending'}</span></td>
+                        <td><small>${d.message}</small></td>
                         <td>
-                            <div class="d-flex gap-1">
-                                <button class="btn btn-sm btn-success" onclick="markSolved('${id}')" title="Mark as Solved">✅</button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="deleteComplaint('${id}')">🗑️</button>
-                            </div>
+                            <button class="btn btn-sm btn-success" onclick="markSolved('${id}')">✅</button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteComplaint('${id}')">🗑️</button>
                         </td>
-                    </tr>
-                `;
+                    </tr>`;
             });
         });
 
-        // Update Status to Solved
-        window.markSolved = async (id) => {
-            if(confirm("Kya ye samasya hal (Solved) ho gayi hai?")) {
-                try {
-                    const docRef = doc(db, "complaints", id);
-                    await updateDoc(docRef, { status: "Solved" });
-                    alert("Status updated to Solved! ✅");
-                } catch (e) { alert("Error: " + e.message); }
-            }
-        }
-
-        // Delete Function
-        window.deleteComplaint = async (id) => {
-            if(confirm("Kya aap is shikayat ko delete karna chahte hain?")) {
-                await deleteDoc(doc(db, "complaints", id));
-            }
-        }
+        window.markSolved = async (id) => { await updateDoc(doc(db, "complaints", id), { status: "Solved" }); };
+        window.deleteComplaint = async (id) => { if(confirm("Delete?")) await deleteDoc(doc(db, "complaints", id)); };
     </script>
 </body>
 </html>

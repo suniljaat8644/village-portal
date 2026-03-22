@@ -31,6 +31,12 @@
             text-align: center; border-bottom-left-radius: 40px; 
             border-bottom-right-radius: 40px; position: relative; 
         }
+        .village-badge {
+            background: rgba(255,255,255,0.2); padding: 5px 15px;
+            border-radius: 20px; font-size: 0.75rem; margin-top: 10px;
+            display: inline-block; cursor: pointer; border: 1px solid rgba(255,255,255,0.3);
+        }
+        
         .header-nav { position: absolute; top: 20px; right: 25px; display: flex; gap: 15px; font-weight: 700; font-size: 0.8rem;}
         
         .logo-placeholder { 
@@ -61,9 +67,50 @@
         .nav-item:active { color: #2e7d32; }
         .nav-icon { display: block; font-size: 1.3rem; }
         .nav-label { font-size: 0.75rem; font-weight: 600; }
+
+        /* Village Modal Styling */
+        #villageModal { background: rgba(0,0,0,0.7); }
     </style>
 </head>
 <body>
+
+    <div class="modal fade" id="villageModal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow" style="border-radius: 25px;">
+                <div class="modal-body p-4">
+                    <h4 class="fw-bold text-center mb-3">Apna Sthan Chunein 📍</h4>
+                    <p class="text-muted text-center small mb-4">Sahi news ke liye location select karein.</p>
+                    
+                    <div class="mb-3">
+                        <label class="small fw-bold mb-1">State (Rajya)</label>
+                        <select id="sel-state" class="form-select rounded-pill shadow-sm">
+                            <option value="">Select State</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Haryana">Haryana</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="small fw-bold mb-1">District (Zila)</label>
+                        <select id="sel-district" class="form-select rounded-pill shadow-sm">
+                            <option value="">Pehle State Chunein</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="small fw-bold mb-1">Village (Gaon)</label>
+                        <select id="sel-village" class="form-select rounded-pill shadow-sm">
+                            <option value="">Pehle District Chunein</option>
+                        </select>
+                    </div>
+
+                    <div class="d-grid">
+                        <button class="btn btn-success py-3 fw-bold rounded-pill shadow" onclick="saveFullLocation()">Save & Continue</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="ticker-container">
         <div class="ticker-wrapper" id="master-ticker">
@@ -80,7 +127,7 @@
         </div>
         <div class="logo-placeholder"><img src="logo.png" alt="Logo"></div>
         <h1 class="fw-bold">Village Digital Hub</h1>
-        <p class="opacity-75">Agriculture • Education • Govt Schemes</p>
+        <div class="village-badge" onclick="showVillageSelector()">📍 <span id="currentVillageDisplay">Select Location</span></div>
     </div>
 
     <div class="container search-bar-container">
@@ -107,10 +154,6 @@
         <div class="container text-center px-4">
             <p class="text-muted small">Gram Suvidha Portal - Bridging the Digital Divide</p>
             <p class="text-muted small mb-4">Created with ❤️ by <strong>Sunil Choudhary</strong></p>
-            <div class="d-flex gap-2 justify-content-center mb-5">
-                <a href="https://wa.me/919509036873" class="btn btn-sm btn-success px-4 py-2 rounded-pill">WhatsApp</a>
-                <a href="tel:+919509036873" class="btn btn-sm btn-primary px-4 py-2 rounded-pill">Call Now</a>
-            </div>
             <a href="login.html" class="text-decoration-none" style="font-size: 0.7rem; color: #aaa; border: 1px solid #eee; padding: 6px 15px; border-radius: 20px;">🔒 Officer Login</a>
         </div>
     </footer>
@@ -121,6 +164,8 @@
         <a href="#contact-section" class="nav-item"><span class="nav-icon">📞</span><span class="nav-label">Contact</span></a>
     </nav>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -129,36 +174,95 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // 1. SMART TICKER LOGIC (Agriculture Rates)
+        // --- CASCADING DATA ---
+        const areaData = {
+            "Rajasthan": {
+                "Jaipur": ["Amer", "Sanganer", "XYZ Gaon"],
+                "Nagaur": ["Didwana", "Kuchaman","MERTA","DEGNA", "ABC Gaon"]
+            },
+            "Haryana": {
+                "Sirsa": ["Ellenabad", "Mandi Dabwali"],
+                "Hisar": ["Adampur", "Hansi"]
+            }
+        };
+
+        const stateSel = document.getElementById('sel-state');
+        const distSel = document.getElementById('sel-district');
+        const villSel = document.getElementById('sel-village');
+
+        stateSel.addEventListener('change', () => {
+            distSel.innerHTML = '<option value="">Select District</option>';
+            villSel.innerHTML = '<option value="">Pehle District Chunein</option>';
+            if(areaData[stateSel.value]) {
+                Object.keys(areaData[stateSel.value]).forEach(d => {
+                    distSel.innerHTML += `<option value="${d}">${d}</option>`;
+                });
+            }
+        });
+
+        distSel.addEventListener('change', () => {
+            villSel.innerHTML = '<option value="">Select Village</option>';
+            const state = stateSel.value;
+            const dist = distSel.value;
+            if(areaData[state] && areaData[state][dist]) {
+                areaData[state][dist].forEach(v => {
+                    villSel.innerHTML += `<option value="${v}">${v}</option>`;
+                });
+            }
+        });
+
+        window.saveFullLocation = () => {
+            const v = villSel.value;
+            if(!v) { alert("Bhai, gaon toh select karo!"); return; }
+            localStorage.setItem('selectedVillage', v);
+            location.reload();
+        }
+
+        window.showVillageSelector = () => {
+            new bootstrap.Modal(document.getElementById('villageModal')).show();
+        }
+
+        const currentVillage = localStorage.getItem('selectedVillage');
+        if(!currentVillage) {
+            showVillageSelector();
+        } else {
+            document.getElementById('currentVillageDisplay').innerText = currentVillage;
+        }
+
+        // --- FIREBASE SYNC ---
         onSnapshot(collection(db, "mandi_prices"), (snapshot) => {
             let tickerHTML = "";
             snapshot.forEach((doc) => {
                 const name = doc.id.toUpperCase();
-                const rate = doc.data().rate || doc.data().text;
+                const rate = doc.data().rate;
                 tickerHTML += `<span class="ticker-item">🌾 <strong>${name}:</strong> ₹${rate}</span>`;
             });
-            
-            // Weather aur News ko bhi ticker mein banaye rakhein
-            const weatherPart = `<span class="ticker-item">☀️ <strong id="weather-text">Weather: Detecting...</strong></span>`;
-            const newsPart = `<span class="ticker-item">📜 <strong>Notice:</strong> <span id="notice-text">Loading News...</span></span>`;
-            
-            document.getElementById('master-ticker').innerHTML = tickerHTML + weatherPart + newsPart;
-            
-            // Re-trigger weather sync because innerHTML resets it
-            fetchWeather(); 
+            updateTicker(tickerHTML);
         });
 
-        // 2. IMPORTANT NEWS UPDATE
-        onSnapshot(doc(db, "portal_data", "news"), (docSnap) => {
+        const newsKey = currentVillage && currentVillage !== 'General' ? `news_${currentVillage}` : 'news';
+        onSnapshot(doc(db, "portal_data", newsKey), (docSnap) => {
+            const noticeEl = document.getElementById('notice-text');
             if(docSnap.exists()){
-                const noticeEl = document.getElementById('notice-text');
                 if(noticeEl) noticeEl.innerText = docSnap.data().text;
+            } else {
+                // Fallback to general news
+                onSnapshot(doc(db, "portal_data", "news"), (genSnap) => {
+                    if(genSnap.exists() && noticeEl) noticeEl.innerText = genSnap.data().text;
+                });
             }
         });
+
+        function updateTicker(mandiHTML) {
+            const weatherPart = `<span class="ticker-item">☀️ <strong id="weather-text">Weather: Detecting...</strong></span>`;
+            const newsPart = `<span class="ticker-item">📜 <strong>Notice:</strong> <span id="notice-text">Loading News...</span></span>`;
+            document.getElementById('master-ticker').innerHTML = mandiHTML + weatherPart + newsPart;
+            fetchWeather();
+        }
     </script>
 
     <script>
-        // Weather logic
+        // Weather and Search Logic (Same as before)
         async function fetchWeather() {
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
@@ -171,7 +275,6 @@
                 });
             }
         }
-        window.onload = fetchWeather;
 
         function handleSearch() {
             let input = document.getElementById('searchInput').value.toLowerCase();
