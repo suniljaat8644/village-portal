@@ -6,36 +6,134 @@
     <title>Support - Village Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #fce4ec; } /* Light pink theme */
-        .contact-card { border-radius: 15px; border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .wa-btn { background-color: #25D366; color: white; font-weight: bold; width: 100%; }
+        body { background-color: #fff5f5; font-family: 'Segoe UI', sans-serif; padding-bottom: 40px; }
+        .support-nav { background: #dc3545; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .back-link { text-decoration: none; color: white; font-weight: 700; }
+        .support-card { border-radius: 20px; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px; background: white; transition: 0.3s; }
+        .wa-btn { background-color: #25D366; color: white; font-weight: 700; width: 100%; padding: 12px; border-radius: 12px; border: none; }
+        .call-btn { background-color: #0d6efd; color: white; font-weight: 700; width: 100%; padding: 12px; border-radius: 12px; text-decoration: none; display: block; }
+        .form-control, .form-select { border-radius: 10px; border: 1px solid #eee; background: #fdfdfd; }
+        .result-item { border-left: 4px solid #dc3545; background: #f8f9fa; padding: 10px; border-radius: 8px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-dark bg-danger">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">⬅ Back to Home</a>
+    <nav class="support-nav text-center">
+        <div class="container d-flex align-items-center">
+            <a href="index.html" class="back-link">⬅ Back to Home</a>
         </div>
     </nav>
 
-    <div class="container mt-4 text-center">
-        <h2 class="mb-4">📩 Help & Complaints</h2>
+    <div class="container mt-4">
+        <h2 class="fw-bold text-center mb-1">📩 Help & Support</h2>
+        <p class="text-muted small text-center mb-4">Aapki samasya ka samadhan, hamari pehal.</p>
         
-        <div class="card contact-card p-4">
-            <h5>Submit a Suggestion</h5>
-            <p class="text-muted">Directly message the village volunteer on WhatsApp.</p>
-            <a href="https://wa.me/919509036873?text=I%20have%20a%20suggestion%20for%20the%20village" class="btn wa-btn">
-                Send WhatsApp Message
-            </a>
+        <div class="card support-card p-4">
+            <h5 class="fw-bold mb-3 text-danger text-center">📝 Nayi Shikayat Likhein</h5>
+            <div class="mb-3">
+                <input type="text" id="comp-name" class="form-control" placeholder="Aapka Naam">
+            </div>
+            <div class="mb-3">
+                <input type="number" id="comp-phone" class="form-control" placeholder="Mobile Number (Track karne ke liye)">
+            </div>
+            <div class="mb-3">
+                <select id="comp-subject" class="form-select">
+                    <option value="Bijli">Bijli (Electricity)</option>
+                    <option value="Pani">Pani (Water)</option>
+                    <option value="Sadak">Sadak (Road)</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <textarea id="comp-msg" class="form-control" rows="3" placeholder="Apni samasya likhein..."></textarea>
+            </div>
+            <button id="submit-comp-btn" class="btn btn-danger w-100 fw-bold rounded-pill shadow-sm">Submit Complaint 🚀</button>
         </div>
 
-        <div class="card contact-card p-4">
-            <h5>Emergency Contact</h5>
-            <p class="text-muted">Press to call the Sarpanch Office</p>
-            <a href="tel:+919509036873" class="btn btn-primary w-100">Call Now</a>
+        <div class="card support-card p-4 border-top border-dark border-4">
+            <h6 class="fw-bold mb-3">🔍 Track Your Complaint</h6>
+            <div class="input-group">
+                <input type="number" class="form-control" placeholder="Mobile Number Dalein" id="trackPhone">
+                <button class="btn btn-dark" id="trackBtn">Check Status</button>
+            </div>
+            <div id="statusResult" class="mt-3" style="display:none;"></div>
+        </div>
+
+        <div class="row g-2 mb-4">
+            <div class="col-6"><a href="https://wa.me/919509036873" class="btn wa-btn">WhatsApp</a></div>
+            <div class="col-6"><a href="tel:+919509036873" class="call-btn text-center">Call Now</a></div>
         </div>
     </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { firebaseConfig } from './firebase-config.js';
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- SUBMIT LOGIC ---
+        document.getElementById('submit-comp-btn').addEventListener('click', async () => {
+            const name = document.getElementById('comp-name').value;
+            const phone = document.getElementById('comp-phone').value;
+            const sub = document.getElementById('comp-subject').value;
+            const msg = document.getElementById('comp-msg').value;
+
+            if(!name || !phone || !msg) { alert("Bhai, puri jankari bhariye!"); return; }
+
+            try {
+                await addDoc(collection(db, "complaints"), {
+                    name, phone, subject: sub, message: msg,
+                    status: "Pending",
+                    time: new Date().toLocaleString()
+                });
+                alert("✅ Shikayat Darj Ho Gayi! Track karne ke liye apna number use karein.");
+                location.reload();
+            } catch (e) { alert("Error: " + e.message); }
+        });
+
+        // --- REAL TRACKING LOGIC ---
+        window.checkStatus = async function() {
+            const phoneInput = document.getElementById('trackPhone').value;
+            const resultDiv = document.getElementById('statusResult');
+
+            if(!phoneInput) { alert("Pehle number toh dalo bhai!"); return; }
+
+            resultDiv.style.display = "block";
+            resultDiv.innerHTML = "<div class='text-center small'>Searching... ⏳</div>";
+
+            try {
+                const q = query(collection(db, "complaints"), where("phone", "==", phoneInput));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    resultDiv.innerHTML = "<div class='alert alert-warning small'>Is number se koi shikayat nahi mili!</div>";
+                } else {
+                    let html = "<h6>Aapki Shikayatein:</h6>";
+                    querySnapshot.forEach((doc) => {
+                        const d = doc.data();
+                        const sClass = d.status === "Solved" ? "badge bg-success" : "badge bg-warning text-dark";
+                        html += `
+                            <div class="result-item shadow-sm">
+                                <div class="d-flex justify-content-between">
+                                    <span class="fw-bold">${d.subject}</span>
+                                    <span class="${sClass}">${d.status}</span>
+                                </div>
+                                <p class="small mb-1 mt-1">${d.message}</p>
+                                <small class="text-muted" style="font-size:0.7rem;">Date: ${d.time}</small>
+                            </div>
+                        `;
+                    });
+                    resultDiv.innerHTML = html;
+                }
+            } catch (e) {
+                resultDiv.innerHTML = "Error: " + e.message;
+            }
+        }
+
+        // Bind button to function
+        document.getElementById('trackBtn').addEventListener('click', checkStatus);
+    </script>
 </body>
 </html>

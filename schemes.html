@@ -7,84 +7,121 @@
     <link rel="manifest" href="manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f1f8e9; font-family: 'Segoe UI', sans-serif; }
-        .scheme-card { border-radius: 15px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; border-left: 6px solid #1b5e20; background: white; transition: 0.3s; }
-        .scheme-card:hover { transform: translateX(5px); }
-        .gov-link { background-color: #1b5e20; color: white; font-weight: bold; padding: 12px; border-radius: 8px; text-decoration: none; display: inline-block; text-align: center; border: none; }
-        .gov-link:hover { background-color: #2e7d32; color: white; }
-        .btn-demo { border: 2px solid #1b5e20; color: #1b5e20; font-weight: bold; border-radius: 8px; padding: 10px; }
+        body { background-color: #f1f8e9; font-family: 'Segoe UI', sans-serif; padding-bottom: 40px; }
+        
+        /* Navbar */
+        .scheme-nav { background: #1b5e20; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .back-link { text-decoration: none; color: white; font-weight: 700; }
+
+        /* Scheme Cards */
+        .scheme-card { 
+            border-radius: 20px; border: none; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.06); 
+            margin-bottom: 20px; border-left: 8px solid #1b5e20; 
+            background: white; transition: 0.3s; 
+        }
+        .scheme-card:hover { transform: translateX(8px); }
+        
+        /* Buttons */
+        .gov-link { 
+            background-color: #1b5e20; color: white; 
+            font-weight: 700; padding: 12px; border-radius: 12px; 
+            text-decoration: none; display: inline-block; 
+            text-align: center; border: none; transition: 0.3s;
+        }
+        .gov-link:hover { background-color: #2e7d32; color: white; box-shadow: 0 4px 12px rgba(27,94,32,0.3); }
+        
+        .btn-demo { 
+            border: 2px solid #1b5e20; color: #1b5e20; 
+            font-weight: 700; border-radius: 12px; padding: 10px; 
+            transition: 0.3s;
+        }
         .btn-demo:hover { background-color: #f1f8e9; color: #1b5e20; }
-        .badge-status { font-size: 0.75rem; vertical-align: middle; margin-left: 10px; }
-        .error-note { font-size: 0.8rem; color: #666; margin-top: 10px; display: block; }
+
+        .badge-status { font-size: 0.7rem; padding: 5px 10px; border-radius: 10px; }
+        
+        /* Modal Customization */
+        .modal-content { border-radius: 25px; border: none; }
+        .modal-header { border-bottom: none; padding-bottom: 0; }
+        .status-box { background: #f8f9fa; border-radius: 15px; padding: 15px; border: 1px dashed #ccc; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-dark bg-success shadow">
+    <nav class="scheme-nav">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">⬅ Back to Home</a>
+            <a class="back-link" href="index.html">⬅ Back to Home</a>
         </div>
     </nav>
 
     <div class="container mt-4">
-        <h2 class="text-center mb-4">📜 Government Schemes</h2>
+        <h2 class="fw-bold text-center mb-1">📜 Government Schemes</h2>
+        <p class="text-center text-muted mb-4 small">Check eligibility and payment status</p>
 
-        <div class="alert alert-warning border-0 shadow-sm mb-4" role="alert">
-            <strong>⚠️ Notice:</strong> Official Government portals (.nic.in) may be slow. Use "View Demo" if links do not open.
+        <div class="alert alert-warning border-0 shadow-sm mb-4 rounded-4" role="alert">
+            <small><strong>Note:</strong> If the official links are loading slowly, please use the <strong>View Demo</strong> button to see an example of the status page.</small>
         </div>
 
         <div class="card scheme-card p-3">
-            <div class="d-flex justify-content-between">
-                <h5>🍎 Ration Card (NFSA)</h5>
-                <span class="badge bg-success badge-status">Direct Link</span>
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                    <h5 class="fw-bold mb-0">🍎 Ration Card (NFSA)</h5>
+                    <p class="text-muted small mb-0 mt-1">Check village list or add family members.</p>
+                </div>
+                <span class="badge bg-success badge-status">Live</span>
             </div>
-            <p class="text-muted small">Check your name in the village ration list or add family members.</p>
-            <a href="https://nfsa.gov.in/" target="_blank" class="gov-link w-100">Open Official Portal</a>
+            <a href="https://nfsa.gov.in/" target="_blank" class="gov-link w-100 mt-2">Open Official Portal</a>
         </div>
 
         <div class="card scheme-card p-3">
-            <div class="d-flex justify-content-between">
-                <h5>👵 Old Age & Widow Pension</h5>
-                <span class="badge bg-primary badge-status">DBT Tracking</span>
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                    <h5 class="fw-bold mb-0">👵 Old Age & Widow Pension</h5>
+                    <p class="text-muted small mb-0 mt-1">Track monthly DBT payment status.</p>
+                </div>
+                <span class="badge bg-primary badge-status">DBT</span>
             </div>
-            <p class="text-muted small">Check monthly payment status and verification for NSAP pensions.</p>
-            <div class="d-flex gap-2">
-                <a href="https://nsap.nic.in/portal" target="_blank" class="gov-link flex-fill">Open Live Portal</a>
+            <div class="d-flex gap-2 mt-2">
+                <a href="https://nsap.nic.in/portal" target="_blank" class="gov-link flex-fill">Live Portal</a>
                 <button onclick="showMockData('pension')" class="btn btn-demo flex-fill">View Demo</button>
             </div>
-            <small class="error-note">Note: If page fails, use the Demo button.</small>
         </div>
 
         <div class="card scheme-card p-3">
-            <div class="d-flex justify-content-between">
-                <h5>🏠 PM Awas Yojana (Rural)</h5>
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                    <h5 class="fw-bold mb-0">🏠 PM Awas Yojana (Rural)</h5>
+                    <p class="text-muted small mb-0 mt-1">View 2026 beneficiary housing list.</p>
+                </div>
                 <span class="badge bg-warning text-dark badge-status">List 2026</span>
             </div>
-            <p class="text-muted small">View the beneficiary list for housing grants and check progress.</p>
-            <div class="d-flex gap-2">
-                <a href="https://pmayg.nic.in/netiay/home.aspx" target="_blank" class="gov-link flex-fill">Open Live Portal</a>
+            <div class="d-flex gap-2 mt-2">
+                <a href="https://pmayg.nic.in/netiay/home.aspx" target="_blank" class="gov-link flex-fill">Live Portal</a>
                 <button onclick="showMockData('awas')" class="btn btn-demo flex-fill">View Demo</button>
             </div>
         </div>
 
-        <div class="alert alert-dark d-flex align-items-center mt-4" role="alert">
-            <div>
-                <strong>💡 Tip:</strong> Use the <strong>DigiLocker</strong> app to keep your Aadhaar and Ration Card safe!
+        
+        <div class="alert alert-dark border-0 rounded-4 d-flex align-items-center mt-4" role="alert">
+            <span class="fs-2 me-3">📱</span>
+            <div class="small">
+                <strong>Digital India Tip:</strong> Install <strong>DigiLocker</strong> to carry your documents digitally and securely.
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="demoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="demoModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
-          <div class="modal-header bg-success text-white" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
-            <h5 class="modal-title" id="modalTitle">Status Details</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content shadow-lg">
+          <div class="modal-header">
+            <h5 class="fw-bold" id="modalTitle">Status Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
-          <div class="modal-body" id="modalContent">
-              </div>
+          <div class="modal-body">
+              <div id="modalContent" class="status-box"></div>
+          </div>
           <div class="modal-footer border-0">
-            <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary w-100 rounded-3" data-bs-dismiss="modal">Close Demo</button>
           </div>
         </div>
       </div>
@@ -93,44 +130,39 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // PWA Registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                .then(() => console.log("PWA Active"))
-                .catch(err => console.log("SW Error", err));
-            });
-        }
-
-        // Mock Data Logic
         function showMockData(type) {
             const modal = new bootstrap.Modal(document.getElementById('demoModal'));
             const title = document.getElementById('modalTitle');
             const content = document.getElementById('modalContent');
 
             if(type === 'pension') {
-                title.innerText = "👵 Pension Status (Mock)";
+                title.innerText = "👵 Pension Status (Example)";
                 content.innerHTML = `
-                    <div class="p-2">
-                        <p><strong>Name:</strong> Ram Lal Choudhary</p>
-                        <p><strong>Village:</strong> JECRC Village Hub</p>
-                        <p><strong>Status:</strong> <span class="badge bg-success">PAYMENT RELEASED</span></p>
-                        <p><strong>Amount:</strong> ₹1,000</p>
-                        <p class="text-muted small">Reference: NSAP/2026/001</p>
-                    </div>
+                    <p><strong>Name:</strong> Ram Lal Choudhary</p>
+                    <p><strong>Scheme:</strong> IGNOAPS (Old Age)</p>
+                    <p><strong>Status:</strong> <span class="text-success fw-bold">SUCCESS</span></p>
+                    <p><strong>Last Payment:</strong> ₹1,000 (Feb 2026)</p>
+                    <hr>
+                    <p class="text-muted small mb-0">Aadhaar: *******4412</p>
                 `;
             } else if(type === 'awas') {
-                title.innerText = "🏠 PM Awas Status (Mock)";
+                title.innerText = "🏠 PM Awas Status (Example)";
                 content.innerHTML = `
-                    <div class="p-2">
-                        <p><strong>Beneficiary:</strong> Smt. Shanti Devi</p>
-                        <p><strong>House Status:</strong> <span class="badge bg-warning text-dark">IN PROGRESS</span></p>
-                        <p><strong>Installment:</strong> 2nd Released (₹40,000)</p>
-                        <p class="text-muted small">PMAY-G Reg: RJ-99210</p>
-                    </div>
+                    <p><strong>Beneficiary:</strong> Smt. Shanti Devi</p>
+                    <p><strong>Current Stage:</strong> Lintel Level</p>
+                    <p><strong>Status:</strong> <span class="text-primary fw-bold">IN PROGRESS</span></p>
+                    <p><strong>Funds:</strong> 2nd Installment Paid</p>
+                    <hr>
+                    <p class="text-muted small mb-0">Registration: RJ-11920</p>
                 `;
             }
             modal.show();
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js');
+            });
         }
     </script>
 </body>

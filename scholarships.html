@@ -7,80 +7,179 @@
     <link rel="manifest" href="manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #fffde7; font-family: 'Segoe UI', sans-serif; }
-        .scholarship-card { border-radius: 15px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; background: white; transition: 0.3s; }
-        .scholarship-card:hover { transform: translateY(-3px); }
-        .status-open { color: #2e7d32; font-weight: bold; background: #e8f5e9; padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; }
-        .doc-list { font-size: 0.85rem; background: #f5f5f5; padding: 10px; border-radius: 10px; list-style: none; }
-        .navbar { box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', sans-serif; padding-bottom: 50px; }
+        
+        /* Navbar Styling */
+        .scholar-nav { background: #ffc107; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .back-link { text-decoration: none; color: #212529; font-weight: 700; }
+
+        /* Card Styling */
+        .scholarship-card { 
+            border-radius: 20px; border: none; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
+            margin-bottom: 20px; background: white; 
+            transition: 0.3s; overflow: hidden;
+        }
+        .scholarship-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        
+        .status-badge { 
+            font-size: 0.75rem; padding: 5px 12px; 
+            border-radius: 20px; font-weight: 700; 
+            text-transform: uppercase;
+        }
+        .status-open { background: #e8f5e9; color: #2e7d32; }
+        
+        .doc-section { 
+            background: #fff9c4; padding: 12px; 
+            border-radius: 12px; border-left: 4px solid #fbc02d;
+        }
+        .doc-list { font-size: 0.85rem; margin: 0; padding-left: 20px; color: #444; }
+
+        .btn-apply { 
+            background: #1e3c72; border: none; 
+            border-radius: 12px; padding: 10px; 
+            font-weight: 600; transition: 0.3s;
+        }
+        .btn-apply:hover { background: #2a5298; }
+
+        .info-banner { 
+            background: #e3f2fd; border: none; 
+            border-radius: 15px; color: #0d47a1; 
+        }
+
+        /* Filter Tabs */
+        .nav-pills .nav-link.active { background-color: #ffc107; color: black; }
+        .nav-pills .nav-link { color: #555; font-weight: 600; margin-right: 5px; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-dark bg-warning">
-        <div class="container">
-            <a class="navbar-brand text-dark fw-bold" href="index.html">⬅ Back to Home</a>
+    <div class="scholar-nav">
+        <div class="container d-flex align-items-center">
+            <a href="index.html" class="back-link">⬅ Back to Home</a>
         </div>
-    </nav>
+    </div>
 
     <div class="container mt-4">
-        <h2 class="text-center mb-4">🎓 Student Scholarships</h2>
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">🎓 Student Scholarships</h2>
+            <p class="text-muted">Find the right support for your education</p>
+        </div>
 
-        <div class="card scholarship-card p-3">
-            <div class="d-flex justify-content-between">
-                <h5>Pre-Matric Scholarship</h5>
-                <span id="status1" class="status-open">Checking...</span>
+        <ul class="nav nav-pills mb-4 justify-content-center" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="pill" onclick="filterScholarship('all')">All</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="pill" onclick="filterScholarship('school')">School</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="pill" onclick="filterScholarship('college')">College/ITI</button>
+            </li>
+        </ul>
+
+        <div class="card scholarship-card p-4 scholar-item" data-type="school">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                    <span class="badge bg-info mb-2">Class 1-10</span>
+                    <h5 class="fw-bold mb-1">Pre-Matric Scholarship</h5>
+                </div>
+                <span id="status1" class="status-badge status-open">Loading...</span>
             </div>
-            <p class="text-muted small">Financial support for students from Class 1 to 10 belonging to SC/ST/OBC/Minority categories.</p>
+            <p class="text-muted small">Financial support for students belonging to SC/ST/OBC/Minority categories studying in government or recognized schools.</p>
             
-            <ul class="doc-list mb-3">
-                <li>📄 Required: Income Certificate, Caste Certificate, Last Marksheet.</li>
-            </ul>
+            <div class="doc-section mb-3">
+                <p class="small fw-bold mb-1">📋 Required Documents:</p>
+                <ul class="doc-list">
+                    <li>Caste & Income Certificate (Latest)</li>
+                    <li>Previous Year Marksheet</li>
+                    <li>Student Bank Passbook</li>
+                </ul>
+            </div>
 
-            <div class="text-end">
-                <a href="https://scholarships.gov.in/" target="_blank" class="btn btn-primary w-100">Apply on NSP Portal</a>
+            <div class="d-grid gap-2">
+                <a href="https://scholarships.gov.in/" target="_blank" class="btn btn-primary btn-apply">Apply on NSP Portal</a>
+                <a href="tel:1800110031" class="btn btn-outline-secondary btn-sm border-0">📞 Helpline: 1800-110-031</a>
             </div>
         </div>
 
-        <div class="card scholarship-card p-3">
-            <div class="d-flex justify-content-between">
-                <h5>Post-Matric Scholarship</h5>
-                <span id="status2" class="status-open">Checking...</span>
+        <div class="card scholarship-card p-4 scholar-item" data-type="college">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                    <span class="badge bg-success mb-2">Degree/Diploma</span>
+                    <h5 class="fw-bold mb-1">Post-Matric Scholarship</h5>
+                </div>
+                <span id="status2" class="status-badge status-open">Loading...</span>
             </div>
-            <p class="text-muted small">Higher education support for ITI, Diploma, Degree, and Engineering students.</p>
+            <p class="text-muted small">Scholarship for Higher education including ITI, B.A, B.Sc, B.Tech, and Medical courses for reserved categories.</p>
             
-            <ul class="doc-list mb-3">
-                <li>📄 Required: Fee Receipt, Bonafide Certificate, Bank Passbook.</li>
-            </ul>
+            <div class="doc-section mb-3">
+                <p class="small fw-bold mb-1">📋 Required Documents:</p>
+                <ul class="doc-list">
+                    <li>Bonafide Certificate from College</li>
+                    <li>Fee Receipt of current year</li>
+                    <li>Aadhaar linked Bank Account</li>
+                </ul>
+            </div>
 
-            <div class="text-end">
-                <a href="https://scholarships.gov.in/" target="_blank" class="btn btn-primary w-100">Apply on NSP Portal</a>
+            <div class="d-grid gap-2">
+                <a href="https://scholarships.gov.in/" target="_blank" class="btn btn-primary btn-apply">Apply on NSP Portal</a>
+                <a href="tel:1800110031" class="btn btn-outline-secondary btn-sm border-0">📞 Helpline: 1800-110-031</a>
             </div>
         </div>
 
-        <div class="alert alert-info py-2" style="font-size: 0.8rem;">
-            <strong>Note:</strong> Keep your Aadhaar linked with your Mobile Number and Bank Account for Direct Benefit Transfer (DBT).
+        <div class="alert info-banner d-flex align-items-center mb-4" role="alert">
+            <span class="fs-3 me-3">💡</span>
+            <div class="small">
+                <strong>Important:</strong> Ensure your <strong>Aadhaar is linked with your Bank Account</strong> (DBT) to receive the scholarship money directly.
+            </div>
+        </div>
+
+        
+        <div class="card p-3 border-0 bg-white rounded-4 shadow-sm">
+            <h6 class="fw-bold border-bottom pb-2">How to Apply? (Step-by-Step)</h6>
+            <div class="small mt-2">
+                <p class="mb-1">1️⃣ <strong>Register:</strong> Create account on NSP Portal.</p>
+                <p class="mb-1">2️⃣ <strong>Fill Details:</strong> Enter Personal & Academic info.</p>
+                <p class="mb-1">3️⃣ <strong>Upload:</strong> Scan and upload required documents.</p>
+                <p class="mb-1">4️⃣ <strong>Submit:</strong> Print the final form and give it to your School/College.</p>
+            </div>
         </div>
     </div>
 
     <script>
-        // Simulation of checking scholarship portal dates
+        // Update Status Simulation
         function updateStatus() {
             setTimeout(() => {
-                document.getElementById('status1').innerHTML = "● OPEN";
-                document.getElementById('status2').innerHTML = "● OPEN";
-                console.log("Scholarship status updated successfully.");
-            }, 800);
+                const statusBadges = document.querySelectorAll('.status-badge');
+                statusBadges.forEach(badge => {
+                    badge.innerHTML = "● Currently Open";
+                    badge.classList.add('status-open');
+                });
+            }, 1000);
         }
-        
-        // Register Service Worker for Offline access
+
+        // Filter Logic
+        function filterScholarship(type) {
+            const items = document.querySelectorAll('.scholar-item');
+            items.forEach(item => {
+                if (type === 'all' || item.getAttribute('data-type') === type) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        window.onload = updateStatus;
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js');
             });
         }
-
-        window.onload = updateStatus;
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -8,243 +8,182 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#2e7d32">
+    <meta name="theme-color" content="#2e7d32">
     
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-        import { firebaseConfig } from './firebase-config.js';
-
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        console.log("Firebase initialized successfully!");
-    </script>
-
     <style>
-        /* --- BASE STYLES --- */
         html { scroll-behavior: smooth; }
         body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
-        
-        a, a:hover, a:focus, a:active { 
-            text-decoration: none !important; 
-            outline: none !important; 
-            color: inherit;
-            -webkit-tap-highlight-color: transparent; 
-        }
+        a, a:hover { text-decoration: none !important; color: inherit; }
 
-        /* --- TICKER TAPE STYLES --- */
+        /* Ticker Styling */
         .ticker-container {
-            background: #ffc107; 
-            color: #000;
-            overflow: hidden;
-            white-space: nowrap;
-            padding: 8px 0;
-            font-size: 0.85rem;
-            font-weight: 700;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 1100;
+            background: #ffc107; color: #000; overflow: hidden;
+            white-space: nowrap; padding: 10px 0; font-size: 0.9rem;
+            font-weight: 700; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky; top: 0; z-index: 1100;
         }
-        .ticker-wrapper {
-            display: inline-block;
-            animation: ticker-scroll 30s linear infinite;
-        }
-        .ticker-item { display: inline-block; padding: 0 50px; }
-        @keyframes ticker-scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        .ticker-container:hover .ticker-wrapper { animation-play-state: paused; }
+        .ticker-wrapper { display: inline-block; animation: ticker-scroll 35s linear infinite; }
+        .ticker-item { display: inline-block; padding: 0 40px; }
+        @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* --- HERO SECTION --- */
-        .hero-section { background: #2e7d32; color: white; padding: 40px 20px 80px 20px; text-align: center; border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; position: relative; }
-        .header-nav { position: absolute; top: 25px; right: 30px; display: flex; gap: 25px; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px;}
-        .header-nav a { color: white !important; }
-
-        .logo-placeholder { width: 110px; height: 110px; margin: 10px auto 15px auto; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 3px solid rgba(255,255,255,0.3); }
+        .hero-section { 
+            background: #2e7d32; color: white; padding: 50px 20px 90px 20px; 
+            text-align: center; border-bottom-left-radius: 40px; 
+            border-bottom-right-radius: 40px; position: relative; 
+        }
+        .header-nav { position: absolute; top: 20px; right: 25px; display: flex; gap: 15px; font-weight: 700; font-size: 0.8rem;}
+        
+        .logo-placeholder { 
+            width: 100px; height: 100px; margin: 0 auto 15px auto; 
+            background: white; border-radius: 50%; display: flex; 
+            align-items: center; justify-content: center; overflow: hidden; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 3px solid white;
+        }
         .logo-placeholder img { width: 100%; height: 100%; object-fit: cover; }
 
-        .hero-section h1 { font-size: 2.2rem; margin-top: 10px; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        .hero-section p { font-size: 1.2rem; margin: 0; opacity: 0.9; }
+        .search-bar-container { max-width: 550px; margin: -35px auto 40px auto; position: relative; z-index: 10; padding: 0 15px; }
+        .input-group { border-radius: 30px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.12); background: white; border:none; }
+        .search-input { border: none !important; padding: 15px 20px; font-size: 1rem; }
 
-        /* --- SEARCH BAR --- */
-        .search-bar-container { max-width: 600px; margin: -35px auto 40px auto; position: relative; z-index: 10; }
-        .input-group { border-radius: 35px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.1); border: none !important; background: white; }
-        .search-input { border: none !important; padding: 20px 30px; font-size: 1.1rem; }
-        .search-input:focus { box-shadow: none !important; }
-        .voice-btn { background: white; border: none; padding-right: 25px; font-size: 1.5rem; cursor: pointer; color: #6c757d; }
-
-        /* --- SERVICE CARDS --- */
-        .service-card { border: none !important; outline: none !important; border-radius: 20px; transition: 0.3s; box-shadow: 0 6px 15px rgba(0,0,0,0.05); height: 100%; background: white; text-align: center; overflow: hidden; }
-        .service-card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.1); }
-        .icon-box { font-size: 4rem; margin: 25px 0 10px 0; }
+        .service-card { border: none; border-radius: 22px; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.04); height: 100%; background: white; text-align: center; padding: 15px; }
+        .service-card:hover { transform: translateY(-7px); box-shadow: 0 12px 25px rgba(0,0,0,0.08); }
+        .icon-box { font-size: 3rem; margin-bottom: 10px; }
         
-        .chat-btn { position: fixed; bottom: 85px; right: 20px; background: #007bff; color: white; padding: 10px 20px; border-radius: 30px; font-weight: 700; box-shadow: 0 5px 15px rgba(0,123,255,0.4); z-index: 99; font-size: 0.8rem; text-decoration: none; }
+        footer { background: white; padding: 40px 0 110px 0; border-top: 1px solid #eee; margin-top: 50px; }
+        .chat-btn { position: fixed; bottom: 85px; right: 20px; background: #007bff; color: white; padding: 10px 22px; border-radius: 30px; font-weight: 700; box-shadow: 0 5px 15px rgba(0,123,255,0.3); z-index: 99; font-size: 0.85rem; }
 
-        /* --- MOBILE BOTTOM NAV --- */
-        .mobile-bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 1000; border-top: 1px solid #eee; }
-        .nav-item { text-align: center; color: #555; text-decoration: none; flex: 1; }
+        .mobile-bottom-nav { 
+            position: fixed; bottom: 0; left: 0; width: 100%; 
+            background: white; display: flex; justify-content: space-around; 
+            padding: 12px 0; box-shadow: 0 -3px 15px rgba(0,0,0,0.08); z-index: 1000; 
+        }
+        .nav-item { text-align: center; color: #666; flex: 1; transition: 0.2s; }
+        .nav-item:active { color: #2e7d32; }
         .nav-icon { display: block; font-size: 1.3rem; }
-        .nav-label { font-size: 0.7rem; font-weight: 600; }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 991px) {
-            .header-nav { display: none; }
-            .hero-section { padding-top: 20px; }
-            .hero-section h1 { font-size: 1.8rem; }
-            body { padding-bottom: 70px; }
-            .service-card small { display: none; }
-            .service-card h5 { font-size: 1.1rem; }
-            .icon-box { font-size: 3rem; margin: 20px 0 5px 0;}
-        }
-        @media (min-width: 992px) {
-            .mobile-bottom-nav { display: none; }
-            .hero-section { padding: 80px 20px 120px 20px; }
-            .hero-section h1 { font-size: 3.5rem; }
-            .logo-placeholder { width: 140px; height: 140px; }
-            .chat-btn { bottom: 30px; }
-            .card-item { max-width: 320px; padding: 15px; }
-        }
-        footer { background: white; padding: 40px 0; border-top: 1px solid #ddd; }
+        .nav-label { font-size: 0.75rem; font-weight: 600; }
     </style>
 </head>
 <body>
 
     <div class="ticker-container">
-        <div class="ticker-wrapper" id="ticker-content">
-            <span class="ticker-item">🌾 <strong>Mandi:</strong> Wheat ₹2,425/qtl | Mustard ₹5,650/qtl</span>
-            <span class="ticker-item">☀️ <strong id="weather-text">Weather: Loading...</strong></span>
-            <span class="ticker-item">📜 <strong>Notice:</strong> Apply for Post-Matric Scholarship before March 31st</span>
-            <span class="ticker-item">📢 <strong>News:</strong> 17th Installment of PM-Kisan released</span>
-            <span class="ticker-item">🌾 <strong>Mandi:</strong> Wheat ₹2,425/qtl | Mustard ₹5,650/qtl</span>
-            <span class="ticker-item">☀️ <strong>Live:</strong> Check your Ration Card status in Schemes section</span>
+        <div class="ticker-wrapper" id="master-ticker">
+            <span class="ticker-item">🌾 <strong>Mandi:</strong> Loading...</span>
+            <span class="ticker-item">☀️ <strong id="weather-text">Weather: Detecting...</strong></span>
+            <span class="ticker-item">📜 <strong>Notice:</strong> <span id="notice-text">Connecting...</span></span>
         </div>
     </div>
 
     <div class="hero-section">
         <div class="header-nav">
-            <a href="index.html">HOME</a>
-            <a href="#contact-section">CONTACT</a>
-            <a href="login.html" style="border: 1px solid white; padding: 5px 12px; border-radius: 20px;">OFFICER LOGIN</a>
+            <a href="index.html" class="text-white">HOME</a>
+            <a href="#contact-section" class="text-white">CONTACT</a>
         </div>
-        <div class="logo-placeholder">
-            <img src="logo.png" alt="Gram Suvidha Logo">
-        </div>
-        <h1>Village Digital Hub</h1>
-        <p>Your one-stop for Agriculture, Education, and Govt Schemes</p>
+        <div class="logo-placeholder"><img src="logo.png" alt="Logo"></div>
+        <h1 class="fw-bold">Village Digital Hub</h1>
+        <p class="opacity-75">Agriculture • Education • Govt Schemes</p>
     </div>
 
     <div class="container search-bar-container">
         <div class="input-group">
-            <input type="text" id="searchInput" class="form-control search-input" 
-                   placeholder="Search for 'Old Age', 'Mandi'..." onkeyup="handleSearch(event)">
-            <button class="voice-btn" onclick="startVoiceSearch()" title="Search by Voice">🎤</button>
+            <input type="text" id="searchInput" class="form-control search-input" placeholder="Search for schemes, rates..." onkeyup="handleSearch()">
+            <button class="btn bg-white pe-4" onclick="startVoiceSearch()">🎤</button>
         </div>
     </div>
 
-    <div class="container mb-5">
-        <div class="row g-4 justify-content-center" id="cardContainer">
-            <div class="col-6 col-md-4 card-item">
-                <a href="agriculture.html">
-                    <div class="card service-card p-2">
-                        <div class="icon-box">🚜</div>
-                        <h5>Agriculture</h5>
-                        <small>Mandi Rates & Weather</small>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 card-item">
-                <a href="scholarships.html">
-                    <div class="card service-card p-2">
-                        <div class="icon-box">🎓</div>
-                        <h5>Scholarships</h5>
-                        <small>Apply for Support</small>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 card-item">
-                <a href="schemes.html">
-                    <div class="card service-card p-2">
-                        <div class="icon-box">📜</div>
-                        <h5>Govt Schemes</h5>
-                        <small>Ration & Pensions</small>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 card-item">
-                <a href="healthcare.html">
-                    <div class="card service-card p-2">
-                        <div class="icon-box">🏥</div>
-                        <h5>Health Care</h5>
-                        <small>Find Nearby Clinics</small>
-                    </div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 card-item">
-                <a href="support.html">
-                    <div class="card service-card p-2">
-                        <div class="icon-box">📩</div>
-                        <h5>Support</h5>
-                        <small>Complaints & Help</small>
-                    </div>
-                </a>
-            </div>
+    <div class="container">
+        <div class="row g-3 justify-content-center" id="cardContainer">
+            <div class="col-6 col-md-4 card-item"><a href="weather.html"><div class="card service-card"><div class="icon-box">☀️</div><h6>Mausam</h6></div></a></div>
+            <div class="col-6 col-md-4 card-item"><a href="agriculture.html"><div class="card service-card"><div class="icon-box">🚜</div><h6>Agriculture</h6></div></a></div>
+            <div class="col-6 col-md-4 card-item"><a href="scholarships.html"><div class="card service-card"><div class="icon-box">🎓</div><h6>Scholarships</h6></div></a></div>
+            <div class="col-6 col-md-4 card-item"><a href="schemes.html"><div class="card service-card"><div class="icon-box">📜</div><h6>Govt Schemes</h6></div></a></div>
+            <div class="col-6 col-md-4 card-item"><a href="healthcare.html"><div class="card service-card"><div class="icon-box">🏥</div><h6>Healthcare</h6></div></a></div>
+            <div class="col-6 col-md-4 card-item"><a href="support.html"><div class="card service-card"><div class="icon-box">📩</div><h6>Support</h6></div></a></div>
         </div>
     </div>
 
-    <nav class="mobile-bottom-nav">
-        <a href="index.html" class="nav-item">
-            <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
-        </a>
-        <a href="javascript:void(0)" onclick="document.getElementById('searchInput').scrollIntoView({behavior:'smooth'}); document.getElementById('searchInput').focus();" class="nav-item">
-            <span class="nav-icon">🔍</span><span class="nav-label">Search</span>
-        </a>
-        <a href="#contact-section" class="nav-item">
-            <span class="nav-icon">📞</span><span class="nav-label">Contact</span>
-        </a>
-    </nav>
-
-    <a href="#contact-section" class="chat-btn">codeHelp</a>
+    <a href="https://wa.me/919509036873" class="chat-btn">WhatsApp Help</a>
 
     <footer id="contact-section">
-        <div class="container text-center">
-            <p class="text-muted">Gram Suvidha Portal - Bridging the Digital Divide</p>
-            <p class="text-muted">Created with ❤️ by <strong>Sunil Choudhary</strong></p>
-            <div class="d-flex gap-2 justify-content-center mt-3 mb-4">
-                <a href="https://wa.me/919509036873" class="btn btn-sm btn-success p-2 px-3"><strong>WhatsApp</strong></a>
-                <a href="tel:+919509036873" class="btn btn-sm btn-primary p-2 px-3"><strong>Call Now</strong></a>
+        <div class="container text-center px-4">
+            <p class="text-muted small">Gram Suvidha Portal - Bridging the Digital Divide</p>
+            <p class="text-muted small mb-4">Created with ❤️ by <strong>Sunil Choudhary</strong></p>
+            <div class="d-flex gap-2 justify-content-center mb-5">
+                <a href="https://wa.me/919509036873" class="btn btn-sm btn-success px-4 py-2 rounded-pill">WhatsApp</a>
+                <a href="tel:+919509036873" class="btn btn-sm btn-primary px-4 py-2 rounded-pill">Call Now</a>
             </div>
-            <a href="login.html" style="font-size: 0.75rem; color: #888; text-decoration: none; border: 1px solid #ddd; padding: 4px 10px; border-radius: 4px;">🔒 Officer Login</a>
+            <a href="login.html" class="text-decoration-none" style="font-size: 0.7rem; color: #aaa; border: 1px solid #eee; padding: 6px 15px; border-radius: 20px;">🔒 Officer Login</a>
         </div>
     </footer>
 
+    <nav class="mobile-bottom-nav">
+        <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a>
+        <a href="javascript:void(0)" onclick="document.getElementById('searchInput').focus()" class="nav-item"><span class="nav-icon">🔍</span><span class="nav-label">Search</span></a>
+        <a href="#contact-section" class="nav-item"><span class="nav-icon">📞</span><span class="nav-label">Contact</span></a>
+    </nav>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { firebaseConfig } from './firebase-config.js';
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // 1. SMART TICKER LOGIC (Agriculture Rates)
+        onSnapshot(collection(db, "mandi_prices"), (snapshot) => {
+            let tickerHTML = "";
+            snapshot.forEach((doc) => {
+                const name = doc.id.toUpperCase();
+                const rate = doc.data().rate || doc.data().text;
+                tickerHTML += `<span class="ticker-item">🌾 <strong>${name}:</strong> ₹${rate}</span>`;
+            });
+            
+            // Weather aur News ko bhi ticker mein banaye rakhein
+            const weatherPart = `<span class="ticker-item">☀️ <strong id="weather-text">Weather: Detecting...</strong></span>`;
+            const newsPart = `<span class="ticker-item">📜 <strong>Notice:</strong> <span id="notice-text">Loading News...</span></span>`;
+            
+            document.getElementById('master-ticker').innerHTML = tickerHTML + weatherPart + newsPart;
+            
+            // Re-trigger weather sync because innerHTML resets it
+            fetchWeather(); 
+        });
+
+        // 2. IMPORTANT NEWS UPDATE
+        onSnapshot(doc(db, "portal_data", "news"), (docSnap) => {
+            if(docSnap.exists()){
+                const noticeEl = document.getElementById('notice-text');
+                if(noticeEl) noticeEl.innerText = docSnap.data().text;
+            }
+        });
+    </script>
+
     <script>
+        // Weather logic
         async function fetchWeather() {
-            try {
-                const weatherText = document.getElementById('weather-text');
-                const mockTemp = Math.floor(Math.random() * (35 - 18 + 1)) + 18; 
-                weatherText.innerText = `Live Weather: Sunny, ${mockTemp}°C`;
-            } catch (err) {
-                console.log("Weather error");
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(async (pos) => {
+                    try {
+                        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`);
+                        const data = await res.json();
+                        const el = document.getElementById('weather-text');
+                        if(el) el.innerText = `Area Temp: ${Math.round(data.current_weather.temperature)}°C 📍`;
+                    } catch (e) { console.log("Weather error"); }
+                });
             }
         }
-        fetchWeather();
+        window.onload = fetchWeather;
 
-        function handleSearch(event) {
+        function handleSearch() {
             let input = document.getElementById('searchInput').value.toLowerCase();
             let cards = document.getElementsByClassName('card-item');
-            for (let i = 0; i < cards.length; i++) {
-                let text = cards[i].innerText.toLowerCase();
-                cards[i].style.display = text.includes(input) ? "" : "none";
+            for (let card of cards) {
+                card.style.display = card.innerText.toLowerCase().includes(input) ? "" : "none";
             }
         }
 
         function startVoiceSearch() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) return alert("Please use Chrome.");
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'hi-IN'; 
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'hi-IN';
             recognition.start();
             recognition.onresult = (e) => {
                 document.getElementById('searchInput').value = e.results[0][0].transcript;
@@ -252,22 +191,5 @@
             };
         }
     </script>
-    <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('✅ Service Worker Registered!', reg))
-        .catch(err => console.log('❌ SW Registration Failed:', err));
-    });
-  }
-
-  // Optional: Catch the install prompt to show a custom button
-  let deferredPrompt;
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    console.log("Prompt is ready to show!");
-  });
-</script>
 </body>
 </html>
