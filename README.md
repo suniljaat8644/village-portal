@@ -1,4 +1,4 @@
-# Gram Suvidha Portal 🚜🎓🏥
+# Gram Suvidha Portal 🚜🎓🏥 
 ### "Bridging the Digital Divide, One Village at a Time."
 
 **Gram Suvidha** is a Progressive Web App (PWA) designed to bring essential government services, agricultural data, and educational information to rural communities in India. Built with a focus on accessibility and low-connectivity environments.
